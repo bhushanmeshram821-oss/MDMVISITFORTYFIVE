@@ -690,20 +690,60 @@
         }
     }
 
+    // ========= Cloud Delete Function added here =========
     function deleteCurrentEntry() {
         if(confirm("तुम्हाला खात्री आहे का? ही एन्ट्री डिलीट झाल्यावर पुन्हा मिळणार नाही.")) {
             const schoolId = document.getElementById('schoolName').value;
             const visitNumber = document.getElementById('visitNumber').value;
-            let records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
             
-            records = records.filter(r => !(r.school === schoolId && r.visit === visitNumber));
-            localStorage.setItem('mdmEvaluations', JSON.stringify(records));
-            
-            alert("एन्ट्री डिलीट केली आहे.");
-            checkVisitEligibility();
-            switchTab('dashboard');
+            // 1. Send DELETE command to Cloud
+            if (APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+                const payload = {
+                    action: "delete",
+                    schoolId: schoolId,
+                    visitNumber: visitNumber
+                };
+
+                const deleteBtns = document.querySelectorAll('.danger-btn');
+                deleteBtns.forEach(b => b.innerText = "⏳ Deleting...");
+
+                fetch(APPS_SCRIPT_URL, {
+                    method: "POST",
+                    headers: { "Content-Type": "text/plain;charset=utf-8" },
+                    body: JSON.stringify(payload)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.status === "success") {
+                        // 2. Remove locally upon success
+                        removeLocallyAndRedirect(schoolId, visitNumber, "एन्ट्री लोकल आणि Cloud दोन्ही ठिकाणाहून डिलीट केली आहे.");
+                    } else {
+                        alert("Cloud वरून डिलीट करताना एरर: " + data.message);
+                        deleteBtns.forEach(b => b.innerText = "🗑️ ही एन्ट्री डिलीट करा");
+                    }
+                })
+                .catch(e => {
+                    console.error("Cloud Sync Error", e);
+                    alert("इंटरनेट अडचण! Cloud वरून डिलीट होऊ शकले नाही.");
+                    deleteBtns.forEach(b => b.innerText = "🗑️ ही एन्ट्री डिलीट करा");
+                });
+            } else {
+                // No Cloud URL, just delete locally
+                removeLocallyAndRedirect(schoolId, visitNumber, "एन्ट्री लोकल मधून डिलीट केली आहे.");
+            }
         }
     }
+
+    function removeLocallyAndRedirect(schoolId, visitNumber, successMsg) {
+        let records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
+        records = records.filter(r => !(r.school === schoolId && r.visit === visitNumber));
+        localStorage.setItem('mdmEvaluations', JSON.stringify(records));
+        
+        alert(successMsg);
+        checkVisitEligibility();
+        switchTab('dashboard');
+    }
+    // ===================================================
 
     function updateVisitTag() {
         const visitNumber = document.getElementById('visitNumber').value;
