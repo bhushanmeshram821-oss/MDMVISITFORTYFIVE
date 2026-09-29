@@ -180,9 +180,6 @@
 
 <div class="container">
     <div class="header">
-        <!-- Image अगदी सुरुवातीला लावली आहे -->
-        <img src="image_2cd3f9.jpg" alt="Mid-day Meal Launched" style="max-width: 100%; border-radius: 10px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
-        
         <h1>जिल्हा परिषद भंडारा</h1>
         <h2>उत्कृष्ट मध्यान्ह भोजन योजना उपक्रम मुल्यांकन</h2>
         <p>समूह साधन केंद्र मुरमाडी/तू. अंतर्गत</p>
@@ -700,7 +697,7 @@
     // Live Sync Functionality
     function syncLiveData() {
         const btn = document.getElementById("syncBtn");
-        btn.innerText = "🔄 सिंक होत অফিসে...";
+        btn.innerText = "🔄 सिंक होत आहे...";
         
         // This will fetch from the Cloud if the Apps Script supports GET method returning JSON.
         fetch(APPS_SCRIPT_URL)
@@ -803,7 +800,7 @@
             renderDashboard();
             checkVisitEligibility();
             updateTopSummary();
-            alert("सर्व डेटा पुसून टाकला অফিসে.");
+            alert("सर्व डेटा पुसून टाकला आहे.");
         }
     }
 </script>
