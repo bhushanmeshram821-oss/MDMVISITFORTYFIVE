@@ -150,6 +150,7 @@
             #formSection, #dashboardSection { display: block !important; padding: 10px 0; }
             
             input, select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-weight: bold; padding: 0 !important; }
+            textarea { border: 1px solid #ccc !important; padding: 5px !important; resize: none; overflow: hidden; background: transparent !important; }
             
             table { margin-bottom: 15px; page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
@@ -158,6 +159,8 @@
             
             .section-title { background-color: #e0e0e0 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border: 1px solid #ccc; padding: 5px; margin-bottom: 5px; }
             .dashboard-table th { background-color: #f2f2f2 !important; color: black !important; }
+            
+            .signature-section { margin-top: 30px !important; }
             
             @page { size: A4 portrait; margin: 10mm; }
         }
@@ -175,10 +178,13 @@
     <div class="nav-tabs">
         <button id="tabHomeBtn" class="active" onclick="switchTab('home')">🏠 मुख्य पान</button>
         <button id="tabFormBtn" onclick="switchTab('form')">📝 मुल्यांकन प्रपत्र भरा</button>
-        <button id="tabDashBtn" onclick="switchTab('dashboard')">📊 अहवाल व क्रमवारी</button>
+        <button id="tabDashBtn" onclick="switchTab('dashboard')">📊 रँकिंग (Live Sync) व अहवाल</button>
     </div>
     
     <div id="homeSection" class="home-section">
+        <!-- New Image Added Here -->
+        <img src="image_2c63fa.jpg" alt="Mid-day Meal Launched" style="max-width: 100%; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+
         <h2 style="color: #2c3e50; font-size: 26px; margin-top: 0;">मूल्यमापन प्रणालीमध्ये आपले स्वागत आहे!</h2>
         <p style="font-size: 18px; color: #555; max-width: 700px; margin: 10px auto;">
             शाळांच्या मध्यान्ह भोजन योजनेचे पारदर्शक आणि अचूक मूल्यमापन करण्यासाठी या डिजिटल प्रपत्राचा वापर करा.
@@ -202,9 +208,15 @@
 
         <form id="evaluationForm" onsubmit="saveData(event)">
             <div class="info-section">
+                <!-- पथक प्रमुख आणि सहाय्यक यांचे नाव -->
                 <div class="form-group" style="flex: 100%;">
-                    <label for="evaluatorName">मुल्यांकन अधिकाऱ्याचे नाव व पद:</label>
+                    <label for="evaluatorName">पथक प्रमुख:</label>
                     <input type="text" id="evaluatorName" value="भूषणकुमार बालकदास मेश्राम (केंद्र समन्वयक, समूह साधन केंद्र पिंपळगाव / स)" required readonly style="background-color: #e8e8e8; font-weight: bold;">
+                </div>
+                
+                <div class="form-group" style="flex: 100%;">
+                    <label for="sahayyakName">सहाय्यक:</label>
+                    <input type="text" id="sahayyakName" value="कु. एस. ए. निकम" required readonly style="background-color: #e8e8e8; font-weight: bold;">
                 </div>
                 
                 <div class="form-group" style="flex: 2;">
@@ -306,8 +318,28 @@
                     </tbody>
                 </table>
 
+                <!-- नवीन शेरा (Remarks) कॉलम -->
+                <div class="section-title"><span>E) शेरा (Remarks)</span></div>
+                <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px; background: #fff;">
+                    <textarea id="sheraText" rows="3" style="width: 100%; border: none; font-family: 'Mukta', sans-serif; font-size: 15px; resize: none;" placeholder="येथे आपला शेरा नोंदवा..."></textarea>
+                </div>
+
                 <div class="grand-total-box">
                     एकूण प्राप्त गुण (A + B + C + D): <span id="grandTotal">0</span> / 100
+                </div>
+
+                <!-- स्वाक्षरी (फक्त प्रिंट करताना दिसेल किंवा शेवटी राहील) -->
+                <div class="signature-section" style="display: flex; justify-content: space-between; margin-top: 40px; margin-bottom: 30px; padding: 0 20px;">
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <b>स्वाक्षरी (सहाय्यक)</b><br>
+                        <span style="color: #555;">कु. एस. ए. निकम</span>
+                    </div>
+                    <div style="text-align: center;">
+                        <p>_______________________</p>
+                        <b>स्वाक्षरी (पथक प्रमुख)</b><br>
+                        <span style="color: #555;">भूषणकुमार बालकदास मेश्राम</span>
+                    </div>
                 </div>
 
                 <button type="submit" id="submitBtn" class="submit-btn">💾 माहिती सेव्ह करा व Cloud वर पाठवा</button>
@@ -319,12 +351,14 @@
     <div id="dashboardSection" class="dashboard-section">
         <div class="action-buttons">
             <button class="clear-btn" onclick="clearData()">🗑️ सर्व डाटा पुसून टाका</button>
+            <!-- Live Sync Button Added Here -->
+            <button class="export-btn" id="syncBtn" style="background-color: #f39c12; margin-right: 10px;" onclick="syncLiveData()">🔄 Live Sync (डेटा रिफ्रेश करा)</button>
             <button class="export-btn" onclick="exportToExcel()">📊 Excel मध्ये डाउनलोड करा</button>
             <button class="export-btn" style="background-color: #8e44ad;" onclick="window.print()">📄 डॅशबोर्ड PDF मध्ये सेव्ह करा (A4 Print)</button>
         </div>
         
-        <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top:0;">गुणानुक्रमे शाळांची स्थिती (रँकिंग)</h3>
-        <p style="color: #7f8c8d;">खालील तक्त्यामध्ये सर्व 15 शाळांचे प्रथम, द्वितीय आणि तृतीय महिना भेटीचे गुण आणि त्यांच्या एकूण गुणांनुसार क्रमवारी (Rank) दिलेली आहे.</p>
+        <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top:0;">गुणानुक्रमे शाळांची स्थिती (Live रँकिंग)</h3>
+        <p style="color: #7f8c8d;">खालील तक्त्यामध्ये सर्व 15 शाळांचे प्रथम, द्वितीय आणि तृतीय महिना भेटीचे गुण आणि त्यांच्या एकूण गुणांनुसार क्रमवारी (Rank) आपोआप दिलेली आहे.</p>
         
         <table class="dashboard-table" id="reportTable">
             <thead>
@@ -409,6 +443,35 @@
         updateVisitTag();
     }
 
+    function loadVisitData() {
+        const schoolId = document.getElementById('schoolName').value;
+        const visitNumber = document.getElementById('visitNumber').value;
+        if (!schoolId) return;
+
+        const records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
+        const record = records.find(r => r.school === schoolId && r.visit === visitNumber);
+
+        if (record && record.inputValues) {
+            let inputs = document.querySelectorAll('.marks-input');
+            inputs.forEach((input, index) => {
+                input.value = record.inputValues[index] || '';
+            });
+            document.getElementById('visitDate').value = record.date || '';
+            if (document.getElementById('sheraText')) {
+                document.getElementById('sheraText').value = record.shera || '';
+            }
+            document.getElementById('submitBtn').innerText = "💾 बदल सेव्ह करा (Update)";
+        } else {
+            document.querySelectorAll('.marks-input').forEach(input => input.value = '');
+            document.getElementById('visitDate').value = '';
+            if (document.getElementById('sheraText')) {
+                document.getElementById('sheraText').value = '';
+            }
+            document.getElementById('submitBtn').innerText = "💾 माहिती सेव्ह करा व Cloud वर पाठवा";
+        }
+        calculateTotals();
+    }
+
     function updateVisitTag() {
         const visitNumber = document.getElementById('visitNumber').value;
         const tagElement = document.getElementById('dynamicVisitTag');
@@ -429,6 +492,7 @@
             updateVisitTag();
         } else {
             warning.style.display = 'none';
+            loadVisitData(); 
         }
     }
 
@@ -498,17 +562,20 @@
              alert("दुसरी भेट भरल्याशिवाय तिसरी भेट भरता येणार नाही."); return;
         }
 
-        // Local Storage Save
+        let inputValues = Array.from(document.querySelectorAll('.marks-input')).map(input => input.value);
+        let sheraValue = document.getElementById('sheraText') ? document.getElementById('sheraText').value : "";
+
         records = records.filter(r => !(r.school === schoolId && r.visit === visitNumber));
         records.push({
             school: schoolId,
             visit: visitNumber,
             date: visitDate,
-            marks: marks.grandTotal
+            marks: marks.grandTotal,
+            inputValues: inputValues,
+            shera: sheraValue
         });
         localStorage.setItem('mdmEvaluations', JSON.stringify(records));
 
-        // Cloud Sync Payload
         const payload = {
             evaluatorName: evaluatorName,
             schoolName: schoolNameText,
@@ -518,10 +585,10 @@
             totalB: marks.totalB,
             totalC: marks.totalC,
             totalD: marks.totalD,
-            grandTotal: marks.grandTotal
+            grandTotal: marks.grandTotal,
+            shera: sheraValue
         };
 
-        // Cloud Sync Fetch Request
         const btn = document.getElementById("submitBtn");
         btn.innerText = "⏳ Cloud वर डेटा पाठवत आहे...";
         btn.disabled = true;
@@ -540,9 +607,33 @@
                 resetAndGoToDashboard();
             });
         } else {
-            // जर लिंक टाकली नसेल तर फक्त लोकल सेव्ह होईल
             resetAndGoToDashboard();
         }
+    }
+    
+    // Live Sync Functionality
+    function syncLiveData() {
+        const btn = document.getElementById("syncBtn");
+        btn.innerText = "🔄 सिंक होत आहे...";
+        
+        // This will fetch from the Cloud if the Apps Script supports GET method returning JSON.
+        fetch(APPS_SCRIPT_URL)
+            .then(response => response.json())
+            .then(data => {
+                if(data && data.length > 0) {
+                    // Update local storage with live cloud data if valid
+                    localStorage.setItem('mdmEvaluations', JSON.stringify(data));
+                }
+                renderDashboard();
+                btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
+                alert("क्लाउड वरून डेटा यशस्वीरित्या सिंक झाला!");
+            })
+            .catch(e => {
+                console.error("Sync Error:", e);
+                renderDashboard();
+                btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
+                alert("सध्या लोकल डेटा दाखवत आहे (Cloud Live Sync साठी Apps Script मध्ये GET Method आवश्यक आहे).");
+            });
     }
 
     function resetAndGoToDashboard() {
@@ -557,6 +648,7 @@
         document.getElementById('totalMarksC').innerText = "0";
         document.getElementById('totalMarksD').innerText = "0";
         document.getElementById('grandTotal').innerText = "0";
+        if (document.getElementById('sheraText')) { document.getElementById('sheraText').value = ""; }
         
         checkVisitEligibility(); 
         switchTab('dashboard');
