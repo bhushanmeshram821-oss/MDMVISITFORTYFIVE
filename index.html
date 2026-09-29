@@ -116,10 +116,8 @@
         .final-btn:hover { background-color: #1a252f; }
 
         .pdf-btn { display: inline-block; width: auto; padding: 10px 20px; font-size: 16px; margin: 10px 5px; }
-        .pdf-btn-1 { background-color: #e67e22; }
-        .pdf-btn-1:hover { background-color: #d35400; }
-        .pdf-btn-2 { background-color: #8e44ad; }
-        .pdf-btn-2:hover { background-color: #732d91; }
+        .pdf-btn-1 { background-color: #16a085; }
+        .pdf-btn-1:hover { background-color: #1abc9c; }
 
         .clear-btn {
             background-color: #e74c3c; color: white; border: none; padding: 10px 15px;
@@ -141,8 +139,7 @@
         .summary-card h4 { margin: 0 0 5px 0; color: #555; font-size: 15px; font-weight: bold; }
         .summary-card .stat { font-size: 24px; font-weight: bold; color: #2c3e50; }
 
-        /* Lock state styling */
-        .locked-form { pointer-events: none; opacity: 0.6; }
+        .locked-form { opacity: 0.8; pointer-events: none; } /* Inputs will be unclickable when final */
 
         /* Sync Status Indicator */
         #syncStatusIndicator { font-size: 14px; font-weight: bold; color: #27ae60; display: none; margin-left: 10px; }
@@ -163,6 +160,7 @@
             .section-title { background-color: #e0e0e0 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border: 1px solid #ccc; padding: 5px; margin-bottom: 5px; }
             .dashboard-table th { background-color: #f2f2f2 !important; color: black !important; }
             .signature-section { margin-top: 30px !important; }
+            #editControls, #lockedMessage, #submitButtonsArea { display: none !important; }
             @page { size: A4 portrait; margin: 10mm; }
         }
     </style>
@@ -194,15 +192,11 @@
             <h3 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px;">योजनेची परिपत्रके व मार्गदर्शक सूचना (PDF)</h3>
             <p style="color: #555; font-size: 16px; margin-bottom: 15px;">खालील लिंकवर क्लिक करून योजनेची अधिकृत परिपत्रके डाउनलोड करा किंवा वाचा:</p>
             
-            <div>
-                <a href="Bhandara_Nutrition_Excellence_Blueprint.pdf" target="_blank" class="pdf-btn pdf-btn-1">📄 Nutrition Excellence Blueprint</a>
-                <a href="उत्कृष्ट_मध्यान्ह_भोजन_योजना_उपक्रम (2).pdf" target="_blank" class="pdf-btn pdf-btn-2">📄 उत्कृष्ट मध्यान्ह भोजन योजना उपक्रम</a>
-            </div>
-            
+            <!-- डायनॅमिक (मोठी) परिपत्रके येथे दिसतील -->
             <div id="uploadedCircularsContainer" style="margin-top: 15px;"></div>
 
             <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #bdc3c7; text-align: left;">
-                <h4 style="margin: 0 0 10px 0; color: #34495e;">+ नवीन मोठे परिपत्रक अपलोड करा (कोणत्याही आकाराचे PDF)</h4>
+                <h4 style="margin: 0 0 10px 0; color: #34495e;">+ नवीन परिपत्रक अपलोड करा (कोणत्याही आकाराचे PDF)</h4>
                 <input type="text" id="newCircName" placeholder="परिपत्रकाचे नाव (उदा. शासन निर्णय २०२२)" style="padding: 8px; width: 40%; border: 1px solid #ccc; border-radius: 4px;">
                 <input type="file" id="newCircFile" accept="application/pdf" style="padding: 8px;">
                 <button onclick="uploadLargeCircular()" class="submit-btn" style="width:auto; display:inline-block; padding: 8px 15px; font-size: 14px; margin:0;">अपलोड (Save)</button>
@@ -283,17 +277,6 @@
                     <input type="date" id="visitDate" required>
                 </div>
             </div>
-            
-            <!-- Edit / Delete Controls -->
-            <div id="editControls" style="display: none; background: #fdf2e9; border: 1px solid #e67e22; padding: 10px; margin-top: 15px; border-radius: 5px; text-align: right;">
-                <span style="float: left; font-weight: bold; color: #d35400; margin-top: 10px;">ही एन्ट्री आधीच सेव्ह केलेली आहे (Draft).</span>
-                <button type="button" onclick="deleteCurrentEntry()" class="danger-btn">🗑️ ही एन्ट्री डिलीट करा</button>
-            </div>
-            
-            <!-- Final Locked Status Message -->
-            <div id="lockedMessage" style="display: none; background: #eaeded; border: 1px solid #7f8c8d; padding: 15px; margin-top: 15px; border-radius: 5px; text-align: center; font-size: 18px; font-weight: bold; color: #2c3e50;">
-                🔒 ही एन्ट्री फायनल (Final) केलेली आहे. आता यात कोणताही बदल करता येणार नाही.
-            </div>
 
             <div style="text-align: center; margin-top: 10px;">
                 <span id="dynamicVisitTag" style="background: #e74c3c; color: white; padding: 6px 15px; border-radius: 20px; font-size: 16px; font-weight: bold; display: inline-block;">प्रथम महिना भेट @ प्रारंभिक स्थिती व अनुपालन तपासणी</span>
@@ -360,30 +343,49 @@
                 <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px; background: #fff;">
                     <textarea id="sheraText" rows="3" style="width: 100%; border: none; font-family: 'Mukta', sans-serif; font-size: 15px; resize: none;" placeholder="येथे आपला शेरा नोंदवा..."></textarea>
                 </div>
+            </div> <!-- End of formBodyWrapper -->
 
-                <div class="grand-total-box">
-                    एकूण प्राप्त गुण (A + B + C + D): <span id="grandTotal">0</span> / 100
+            <div class="grand-total-box">
+                एकूण प्राप्त गुण (A + B + C + D): <span id="grandTotal">0</span> / 100
+            </div>
+
+            <div class="signature-section" style="display: flex; justify-content: space-between; margin-top: 40px; margin-bottom: 30px; padding: 0 20px;">
+                <div style="text-align: center;">
+                    <p>_______________________</p>
+                    <b>स्वाक्षरी (सहाय्यक)</b><br>
+                    <span style="color: #555;">कु. एस. ए. निकम</span>
                 </div>
-
-                <div class="signature-section" style="display: flex; justify-content: space-between; margin-top: 40px; margin-bottom: 30px; padding: 0 20px;">
-                    <div style="text-align: center;">
-                        <p>_______________________</p>
-                        <b>स्वाक्षरी (सहाय्यक)</b><br>
-                        <span style="color: #555;">कु. एस. ए. निकम</span>
-                    </div>
-                    <div style="text-align: center;">
-                        <p>_______________________</p>
-                        <b>स्वाक्षरी (पथक प्रमुख)</b><br>
-                        <span style="color: #555;">भूषणकुमार बालकदास मेश्राम</span>
-                    </div>
-                </div>
-
-                <!-- Submit and Final Buttons -->
-                <div id="submitButtonsArea" style="display: flex; gap: 10px;">
-                    <button type="submit" id="submitBtn" class="submit-btn">💾 माहिती सेव्ह करा (Draft)</button>
-                    <button type="button" id="finalBtn" class="final-btn" onclick="saveData(event, true)">🔒 फायनल सबमिट करा (Lock)</button>
+                <div style="text-align: center;">
+                    <p>_______________________</p>
+                    <b>स्वाक्षरी (पथक प्रमुख)</b><br>
+                    <span style="color: #555;">भूषणकुमार बालकदास मेश्राम</span>
                 </div>
             </div>
+
+            <!-- Submit and Final Buttons -->
+            <div id="submitButtonsArea" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                <button type="submit" id="submitBtn" class="submit-btn">💾 माहिती सेव्ह करा (Draft)</button>
+                <button type="button" id="finalBtn" class="final-btn" onclick="saveData(event, true)">🔒 फायनल सबमिट करा (Lock)</button>
+            </div>
+
+            <!-- Edit / Delete Controls (For Drafts) -->
+            <div id="editControls" style="display: none; background: #fdf2e9; border: 1px solid #e67e22; padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center;">
+                <p style="font-weight: bold; color: #d35400; margin-top: 0; margin-bottom: 10px;">ही एन्ट्री आधीच सेव्ह केलेली आहे (Draft).</p>
+                <div style="display: flex; justify-content: center;">
+                    <button type="button" onclick="deleteCurrentEntry()" class="danger-btn">🗑️ ही एन्ट्री डिलीट करा</button>
+                </div>
+            </div>
+
+            <!-- Final Locked Status Message & Controls (For Final) -->
+            <div id="lockedMessage" style="display: none; background: #eaeded; border: 1px solid #7f8c8d; padding: 15px; margin-bottom: 20px; border-radius: 5px; text-align: center;">
+                <div style="font-size: 18px; font-weight: bold; color: #2c3e50;">🔒 ही एन्ट्री फायनल (Final) केलेली आहे.</div>
+                <p style="color: #555; margin-top: 5px; margin-bottom: 15px;">आता यात कोणताही बदल करता येणार नाही. बदल करायचा असल्यास आधी 'अनलॉक' करा.</p>
+                <div style="display: flex; gap: 15px; justify-content: center;">
+                     <button type="button" onclick="unlockEntry()" class="final-btn" style="background-color: #f39c12; margin: 0;">✏️ बदल करा (Unlock)</button>
+                     <button type="button" onclick="deleteCurrentEntry()" class="danger-btn" style="margin: 0;">🗑️ ही एन्ट्री डिलीट करा</button>
+                </div>
+            </div>
+
         </form>
     </div>
 
@@ -464,7 +466,7 @@
         
         const addRequest = store.add(circularData);
         addRequest.onsuccess = function() {
-            alert("मोठे परिपत्रक यशस्वीरित्या डेटाबेसमध्ये सेव्ह झाले!");
+            alert("परिपत्रक यशस्वीरित्या सेव्ह झाले!");
             document.getElementById('newCircName').value = "";
             document.getElementById('newCircFile').value = "";
             renderCirculars();
@@ -491,26 +493,15 @@
                 const fileURL = URL.createObjectURL(c.fileObj);
                 
                 const div = document.createElement('div');
-                div.style = "display:inline-block; margin: 10px 5px; position:relative;";
+                div.style = "display:inline-block; margin: 10px 5px;";
+                // Delete button completely removed as requested
                 div.innerHTML = `
-                    <a href="${fileURL}" download="${c.name}.pdf" target="_blank" class="pdf-btn" style="background-color: #16a085;">📄 ${c.name}</a>
-                    <button type="button" onclick="deleteCircular(${cursor.key})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer; font-size:12px; font-weight:bold;" title="डिलीट करा">X</button>
-                `;
+                    <a href="${fileURL}" download="${c.name}.pdf" target="_blank" class="pdf-btn pdf-btn-1">📄 ${c.name}</a>
+                `; 
                 container.appendChild(div);
                 cursor.continue();
             }
         };
-    }
-
-    function deleteCircular(id) {
-        if(confirm("हे परिपत्रक कायमचे डिलीट करायचे आहे का?")) {
-            const transaction = db.transaction(["circulars"], "readwrite");
-            const store = transaction.objectStore("circulars");
-            store.delete(id);
-            transaction.oncomplete = function() {
-                renderCirculars();
-            };
-        }
     }
     // ----------------------------------------------------
 
@@ -654,12 +645,12 @@
             if (record.isFinal) {
                 formBodyWrapper.classList.add('locked-form');
                 submitButtonsArea.style.display = 'none';
-                editControls.style.display = 'none'; // Cannot delete if final
-                lockedMessage.style.display = 'block';
+                editControls.style.display = 'none'; 
+                lockedMessage.style.display = 'block'; // Shows bottom controls for final
             } else {
                 formBodyWrapper.classList.remove('locked-form');
                 submitButtonsArea.style.display = 'flex';
-                editControls.style.display = 'block'; // Allow delete
+                editControls.style.display = 'block'; // Shows bottom controls for draft
                 lockedMessage.style.display = 'none';
                 document.getElementById('submitBtn').innerText = "💾 बदल सेव्ह करा (Update Draft)";
             }
@@ -680,6 +671,23 @@
         
         calculateTotals();
         updateTopSummary();
+    }
+
+    function unlockEntry() {
+        if(confirm("तुम्हाला खात्री आहे का की ही एन्ट्री अनलॉक (Unlock) करायची आहे?")) {
+            const schoolId = document.getElementById('schoolName').value;
+            const visitNumber = document.getElementById('visitNumber').value;
+            let records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
+            
+            let record = records.find(r => r.school === schoolId && r.visit === visitNumber);
+            if (record) {
+                record.isFinal = false; // Set to not final
+                localStorage.setItem('mdmEvaluations', JSON.stringify(records));
+                
+                alert("एन्ट्री अनलॉक झाली आहे. आता तुम्ही फॉर्ममध्ये बदल करू शकता.");
+                loadVisitData(); // Reload the form to show edit options
+            }
+        }
     }
 
     function deleteCurrentEntry() {
@@ -784,7 +792,7 @@
             return;
         }
 
-        if(makeFinal && !confirm("तुम्हाला खात्री आहे का? एकदा फायनल केल्यावर या माहितीत कधीही बदल करता येणार नाही.")) {
+        if(makeFinal && !confirm("तुम्हाला खात्री आहे का? एकदा फायनल केल्यावर या माहितीत थेट बदल करता येणार नाही.")) {
             return;
         }
 
