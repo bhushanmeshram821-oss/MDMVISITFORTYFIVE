@@ -22,7 +22,7 @@
             margin: 0 auto;
             background: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             overflow: hidden;
         }
 
@@ -30,21 +30,22 @@
             background-color: #1a5276;
             color: #ffffff;
             text-align: center;
-            padding: 15px 15px; /* कमी केले */
+            padding: 10px 15px; /* मोकळी जागा कमी केली */
         }
 
+        /* Image CSS */
         .header img {
             max-width: 100%;
-            max-height: 140px; /* उंची मर्यादित ठेवली जेणेकरून जागा वाचेल */
+            max-height: 120px;
             object-fit: contain;
-            border-radius: 8px;
-            margin-bottom: 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.2);
         }
 
         .header h1 { margin: 0; font-size: 24px; font-weight: 700; }
-        .header h2 { margin: 5px 0 0 0; font-size: 18px; color: #f1c40f; }
-        .header p { margin: 5px 0 0 0; font-size: 15px; opacity: 0.9; }
+        .header h2 { margin: 2px 0 0 0; font-size: 18px; color: #f1c40f; }
+        .header p { margin: 2px 0 0 0; font-size: 15px; opacity: 0.9; }
 
         /* Tabs Navigation */
         .nav-tabs { display: flex; background: #2c3e50; }
@@ -57,13 +58,13 @@
         .nav-tabs button.active { background: #27ae60; border-bottom: 4px solid #f1c40f; }
 
         .info-section {
-            background-color: #eaf2f8; padding: 10px 15px; /* कमी केले */
+            background-color: #eaf2f8; padding: 10px 15px; /* मोकळी जागा कमी केली */
             border-bottom: 2px solid #d4e6f1; display: flex;
-            justify-content: space-between; flex-wrap: wrap; gap: 10px; /* गॅप कमी केला */
+            justify-content: space-between; flex-wrap: wrap; gap: 8px; /* Gap कमी केला */
         }
 
-        .form-group { margin-bottom: 10px; flex: 1; min-width: 200px; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 3px; color: #2c3e50; }
+        .form-group { margin-bottom: 5px; flex: 1; min-width: 200px; } /* Margin कमी केले */
+        .form-group label { display: block; font-weight: 600; margin-bottom: 2px; color: #2c3e50; font-size: 14px; }
         
         /* Number Input Arrows Remove CSS */
         input[type=number]::-webkit-inner-spin-button, 
@@ -91,13 +92,13 @@
         }
 
         .section-title {
-            background-color: #2980b9; color: white; padding: 6px 12px;
+            background-color: #2980b9; color: white; padding: 6px 12px; /* मोकळी जागा कमी केली */
             border-radius: 5px; font-size: 16px; margin-bottom: 10px;
             display: flex; justify-content: space-between;
         }
 
         table { width: 100%; border-collapse: collapse; margin-bottom: 15px; }
-        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; font-size: 14px; } /* पॅडिंग कमी केले */
+        th, td { border: 1px solid #ddd; padding: 6px; text-align: left; font-size: 14px;}
         th { background-color: #f2f2f2; color: #2c3e50; font-weight: 700; }
 
         .marks-input {
@@ -126,7 +127,7 @@
         .export-btn { background-color: #3498db; }
         .export-btn:hover { background-color: #2980b9; }
 
-        .pdf-btn { display: inline-block; width: auto; padding: 8px 15px; font-size: 15px; margin: 5px; }
+        .pdf-btn { display: inline-block; width: auto; padding: 8px 15px; font-size: 14px; margin: 5px; }
         .pdf-btn-1 { background-color: #e67e22; }
         .pdf-btn-1:hover { background-color: #d35400; }
         .pdf-btn-2 { background-color: #8e44ad; }
@@ -155,40 +156,44 @@
 
         /* Print Styles for A4 Size PDF (२ पानांत बसवण्यासाठी Optimized) */
         @media print {
-            body { background: white; padding: 0; margin: 0; font-size: 9.5pt; } /* फॉन्ट लहान केला */
+            body { background: white; padding: 0; margin: 0; font-size: 9pt; } /* फॉन्ट लहान केला */
             .container { box-shadow: none; max-width: 100%; border-radius: 0; padding: 0; margin: 0;}
             
             .nav-tabs, .submit-btn, .clear-btn, .export-btn, .pdf-section, #homeSection, .action-buttons, .summary-cards { 
                 display: none !important; 
             }
             
-            .header img { max-height: 70px; object-fit: contain; margin-bottom: 5px; } /* प्रिंटसाठी इमेज छोटी केली */
+            /* प्रिंटसाठी इमेज छोटी केली */
+            .header img { max-height: 60px; object-fit: contain; margin-bottom: 2px; } 
+            
             .header { background-color: white !important; color: black !important; padding: 5px 0; border-bottom: 1px solid #ccc; page-break-after: avoid;}
-            .header h1 { color: black !important; margin: 2px 0; font-size: 16pt;}
-            .header h2 { color: black !important; margin: 2px 0; font-size: 12pt;}
-            .header p { color: black !important; margin: 2px 0; font-size: 10pt;}
+            .header h1 { color: black !important; margin: 0; font-size: 14pt;}
+            .header h2 { color: black !important; margin: 2px 0; font-size: 11pt;}
+            .header p { color: black !important; margin: 0; font-size: 9pt;}
             
             #formSection, #dashboardSection { display: block !important; padding: 5px 0; }
             
+            /* मोकळ्या जागा कमी केल्या */
             .info-section { padding: 5px !important; margin-bottom: 5px !important; gap: 5px !important;}
-            .form-group { margin-bottom: 5px !important; }
-            .form-group label { margin-bottom: 2px !important; font-size: 9pt !important;}
+            .form-group { margin-bottom: 2px !important; }
+            .form-group label { margin-bottom: 0px !important; font-size: 9pt !important;}
             
-            input, select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-weight: bold; padding: 0 !important; font-size: 10pt !important; height: auto !important;}
-            textarea { border: 1px solid #ccc !important; padding: 3px !important; resize: none; overflow: hidden; background: transparent !important; font-size: 10pt !important;}
+            input, select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-weight: bold; padding: 0 !important; font-size: 9.5pt !important; height: auto !important;}
+            textarea { border: 1px solid #ccc !important; padding: 2px !important; resize: none; overflow: hidden; background: transparent !important; font-size: 9.5pt !important;}
             
-            table { margin-bottom: 10px !important; page-break-inside: auto; }
+            table { margin-bottom: 8px !important; page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
-            th { background-color: #f2f2f2 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px !important; font-size: 9.5pt !important;}
-            td { padding: 4px !important; font-size: 9.5pt !important;}
+            th { background-color: #f2f2f2 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 3px !important; font-size: 9pt !important;}
+            td { padding: 3px !important; font-size: 9pt !important;}
             
-            .section-title { background-color: #e0e0e0 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border: 1px solid #ccc; padding: 4px !important; margin-bottom: 5px !important; font-size: 11pt !important;}
+            .section-title { background-color: #e0e0e0 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border: 1px solid #ccc; padding: 3px !important; margin-bottom: 4px !important; font-size: 10pt !important;}
             .dashboard-table th { background-color: #f2f2f2 !important; color: black !important; }
             
-            .grand-total-box { padding: 8px !important; font-size: 14pt !important; margin-bottom: 10px !important;}
-            .signature-section { margin-top: 20px !important; margin-bottom: 10px !important; }
+            .grand-total-box { padding: 5px !important; font-size: 12pt !important; margin-bottom: 8px !important;}
+            .signature-section { margin-top: 15px !important; margin-bottom: 5px !important; }
             
-            @page { size: A4 portrait; margin: 5mm; } /* मार्जिन खूप कमी केले जेणेकरून 2 पानांत बसेल */
+            /* मार्जिन खूप कमी केले जेणेकरून 2 पानांत बसेल */
+            @page { size: A4 portrait; margin: 5mm; } 
         }
     </style>
 </head>
@@ -370,14 +375,14 @@
                 </div>
 
                 <!-- स्वाक्षरी -->
-                <div class="signature-section" style="display: flex; justify-content: space-between; margin-top: 25px; margin-bottom: 15px; padding: 0 15px;">
+                <div class="signature-section" style="display: flex; justify-content: space-between; margin-top: 15px; margin-bottom: 10px; padding: 0 15px;">
                     <div style="text-align: center;">
-                        <p style="margin-bottom:5px;">_______________________</p>
+                        <p style="margin-bottom:2px;">_______________________</p>
                         <b>स्वाक्षरी (सहाय्यक)</b><br>
                         <span style="color: #555;">कु. एस. ए. निकम</span>
                     </div>
                     <div style="text-align: center;">
-                        <p style="margin-bottom:5px;">_______________________</p>
+                        <p style="margin-bottom:2px;">_______________________</p>
                         <b>स्वाक्षरी (पथक प्रमुख)</b><br>
                         <span style="color: #555;">भूषणकुमार बालकदास मेश्राम</span>
                     </div>
@@ -816,7 +821,7 @@
             renderDashboard();
             checkVisitEligibility();
             updateTopSummary();
-            alert("सर्व डेटा पुसून टाकला आहे.");
+            alert("सर्व डेटा पुसून टाकला অফিসে.");
         }
     }
 </script>
