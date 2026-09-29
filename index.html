@@ -135,12 +135,21 @@
         .rank-2 { background-color: #f9e79f !important; }
         .rank-3 { background-color: #fadbd8 !important; }
         
+        /* नवीन Summary Cards CSS */
+        .summary-cards { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 25px; }
+        .summary-card { flex: 1; min-width: 200px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; border-left: 6px solid #ccc; }
+        .summary-card.green { border-left-color: #27ae60; background-color: #eafaf1; }
+        .summary-card.orange { border-left-color: #f39c12; background-color: #fef5e7; }
+        .summary-card.purple { border-left-color: #8e44ad; background-color: #f4ecf8; }
+        .summary-card h4 { margin: 0 0 5px 0; color: #555; font-size: 15px; font-weight: bold; }
+        .summary-card .stat { font-size: 24px; font-weight: bold; color: #2c3e50; }
+
         /* Print Styles for A4 Size PDF */
         @media print {
             body { background: white; padding: 0; margin: 0; font-size: 10pt; }
             .container { box-shadow: none; max-width: 100%; border-radius: 0; padding: 0; margin: 0;}
             
-            .nav-tabs, .submit-btn, .clear-btn, .export-btn, .pdf-section, #homeSection, .action-buttons { 
+            .nav-tabs, .submit-btn, .clear-btn, .export-btn, .pdf-section, #homeSection, .action-buttons, .summary-cards { 
                 display: none !important; 
             }
             
@@ -183,6 +192,9 @@
     
     <div id="homeSection" class="home-section">
 
+        <!-- Image added at the top of the home section -->
+        <img src="image_2cd3f9.jpg" alt="Mid-day Meal Launched" style="max-width: 100%; border-radius: 10px; margin-bottom: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);">
+
         <h2 style="color: #2c3e50; font-size: 26px; margin-top: 0;">मूल्यमापन प्रणालीमध्ये आपले स्वागत आहे!</h2>
         <p style="font-size: 18px; color: #555; max-width: 700px; margin: 10px auto;">
             शाळांच्या मध्यान्ह भोजन योजनेचे पारदर्शक आणि अचूक मूल्यमापन करण्यासाठी या डिजिटल प्रपत्राचा वापर करा.
@@ -202,6 +214,22 @@
     <div id="formSection" class="evaluation-section">
         <div class="action-buttons" style="margin-bottom: 15px; text-align: right;">
              <button class="export-btn" style="display:inline-block; width:auto; padding: 10px 20px; background-color: #8e44ad;" onclick="window.print()">📄 फॉर्म PDF मध्ये सेव्ह करा (A4 Print)</button>
+        </div>
+
+        <!-- नवीन Summary Cards Section -->
+        <div class="summary-cards">
+            <div class="summary-card green">
+                <h4>झालेल्या एकूण भेटी</h4>
+                <div class="stat" id="statTotalVisits">0</div>
+            </div>
+            <div class="summary-card orange">
+                <h4>सध्याची निवडलेली भेट</h4>
+                <div class="stat" id="statCurrentVisit">-</div>
+            </div>
+            <div class="summary-card purple">
+                <h4>सदर शाळेवरील भेट</h4>
+                <div class="stat" id="statSchoolVisit">-</div>
+            </div>
         </div>
 
         <form id="evaluationForm" onsubmit="saveData(event)">
@@ -356,7 +384,7 @@
         </div>
         
         <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top:0;">गुणानुक्रमे शाळांची स्थिती (Live रँकिंग)</h3>
-        <p style="color: #7f8c8d;">खालील तक्त्यामध्ये सर्व 15 शाळांचे प्रथम, द्वितीय आणि तृतीय महिना भेटीचे गुण आणि त्यांच्या एकूण गुणांनुसार क्रमवारी (Rank) आपोआप दिलेली आहे.</p>
+        <p style="color: #7f8c8d;">खालील तक्त्यामध्ये सर्व 15 शाळांचे प्रथम, द्वितीय आणि तृतीय महिना भेटीचे गुण आणि त्यांच्या एकूण गुणांनुसार क्रमवारी (Rank) आपोआप दिलेली आहे. <b style="color: #e74c3c;">(कोणतेही प्रपत्र पाहण्यासाठी डॅशबोर्डमधील गुणांवर क्लिक करा)</b></p>
         
         <table class="dashboard-table" id="reportTable">
             <thead>
@@ -400,6 +428,36 @@
 
     function initApp() {
         switchTab('home');
+        updateTopSummary();
+    }
+
+    // नवीन टॉप समरी अपडेट फंक्शन
+    function updateTopSummary() {
+        const records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
+        document.getElementById('statTotalVisits').innerText = records.length;
+
+        const schoolId = document.getElementById('schoolName').value;
+        const visitDropdown = document.getElementById('visitNumber');
+        
+        let currentVisitText = "-";
+        if(visitDropdown.value === "1") currentVisitText = "प्रथम भेट";
+        if(visitDropdown.value === "2") currentVisitText = "द्वितीय भेट";
+        if(visitDropdown.value === "3") currentVisitText = "तृतीय भेट";
+        document.getElementById('statCurrentVisit').innerText = currentVisitText;
+
+        if(schoolId) {
+            const schoolRecords = records.filter(r => r.school === schoolId);
+            const isEditing = schoolRecords.some(r => r.visit === visitDropdown.value);
+            
+            if(isEditing) {
+                document.getElementById('statSchoolVisit').innerText = visitDropdown.value + " वी भेट (संपादित)";
+            } else {
+                const nextVisit = schoolRecords.length + 1;
+                document.getElementById('statSchoolVisit').innerText = nextVisit <= 3 ? nextVisit + " वी भेट चालू" : "पूर्ण (3 भेटी)";
+            }
+        } else {
+            document.getElementById('statSchoolVisit').innerText = "शाळा निवडा";
+        }
     }
 
     function checkVisitEligibility() {
@@ -441,6 +499,30 @@
         updateVisitTag();
     }
 
+    // डॅशबोर्ड मधून प्रपत्र थेट पाहण्यासाठी फंक्शन
+    function viewForm(schoolId, visitNumber) {
+        switchTab('form');
+        document.getElementById('schoolName').value = schoolId;
+        
+        const optVisit2 = document.getElementById('optVisit2');
+        const optVisit3 = document.getElementById('optVisit3');
+        
+        const records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
+        const schoolRecords = records.filter(r => r.school === schoolId);
+        
+        const hasVisit1 = schoolRecords.some(r => r.visit === "1");
+        const hasVisit2 = schoolRecords.some(r => r.visit === "2");
+
+        optVisit2.disabled = !hasVisit1;
+        optVisit3.disabled = !hasVisit2;
+
+        document.getElementById('visitNumber').value = visitNumber;
+        updateVisitTag(); 
+        
+        // फॉर्म ओपन झाल्यावर पेज वरच्या बाजूला स्क्रोल करा
+        window.scrollTo(0, 0);
+    }
+
     function loadVisitData() {
         const schoolId = document.getElementById('schoolName').value;
         const visitNumber = document.getElementById('visitNumber').value;
@@ -468,6 +550,7 @@
             document.getElementById('submitBtn').innerText = "💾 माहिती सेव्ह करा व Cloud वर पाठवा";
         }
         calculateTotals();
+        updateTopSummary();
     }
 
     function updateVisitTag() {
@@ -492,6 +575,7 @@
             warning.style.display = 'none';
             loadVisitData(); 
         }
+        updateTopSummary();
     }
 
     function switchTab(tabName) {
@@ -505,6 +589,9 @@
 
         if(tabName === 'dashboard') {
             renderDashboard();
+        }
+        if(tabName === 'form') {
+            updateTopSummary();
         }
     }
 
@@ -625,6 +712,7 @@
                 renderDashboard();
                 btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
                 alert("क्लाउड वरून डेटा यशस्वीरित्या सिंक झाला!");
+                updateTopSummary();
             })
             .catch(e => {
                 console.error("Sync Error:", e);
@@ -649,6 +737,7 @@
         if (document.getElementById('sheraText')) { document.getElementById('sheraText').value = ""; }
         
         checkVisitEligibility(); 
+        updateTopSummary();
         switchTab('dashboard');
     }
 
@@ -668,9 +757,12 @@
         records.forEach(rec => {
             let schoolObj = schoolStats.find(s => s.id === rec.school);
             if(schoolObj) {
-                if(rec.visit === '1') { schoolObj.v1 = rec.marks; schoolObj.total += rec.marks; }
-                if(rec.visit === '2') { schoolObj.v2 = rec.marks; schoolObj.total += rec.marks; }
-                if(rec.visit === '3') { schoolObj.v3 = rec.marks; schoolObj.total += rec.marks; }
+                // गुणांना क्लिकेबल बनवले आहे
+                let displayMarks = `<a href="javascript:void(0)" onclick="viewForm('${rec.school}', '${rec.visit}')" style="color: #2980b9; text-decoration: underline; font-weight: bold;" title="प्रपत्र पहा">${rec.marks}</a>`;
+                
+                if(rec.visit === '1') { schoolObj.v1 = displayMarks; schoolObj.total += rec.marks; }
+                if(rec.visit === '2') { schoolObj.v2 = displayMarks; schoolObj.total += rec.marks; }
+                if(rec.visit === '3') { schoolObj.v3 = displayMarks; schoolObj.total += rec.marks; }
             }
         });
 
@@ -709,6 +801,7 @@
             localStorage.removeItem('mdmEvaluations');
             renderDashboard();
             checkVisitEligibility();
+            updateTopSummary();
             alert("सर्व डेटा पुसून टाकला आहे.");
         }
     }
