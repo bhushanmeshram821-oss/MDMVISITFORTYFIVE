@@ -30,17 +30,16 @@
             background-color: #1a5276;
             color: #ffffff;
             text-align: center;
-            padding: 10px 20px; /* मोकळी जागा कमी केली */
+            padding: 10px 20px;
         }
 
         .header h1 { margin: 0; font-size: 26px; font-weight: 700; }
-        .header h2 { margin: 5px 0 0 0; font-size: 20px; color: #f1c40f; } /* मोकळी जागा कमी केली */
-        .header p { margin: 5px 0 0 0; font-size: 16px; opacity: 0.9; } /* मोकळी जागा कमी केली */
+        .header h2 { margin: 5px 0 0 0; font-size: 20px; color: #f1c40f; }
+        .header p { margin: 5px 0 0 0; font-size: 16px; opacity: 0.9; }
 
-        /* Tabs Navigation */
         .nav-tabs { display: flex; background: #2c3e50; }
         .nav-tabs button {
-            flex: 1; padding: 10px; font-size: 18px; font-weight: bold; /* पॅडिंग कमी केले */
+            flex: 1; padding: 10px; font-size: 18px; font-weight: bold;
             color: white; background: none; border: none; cursor: pointer;
             transition: 0.3s; font-family: 'Mukta', sans-serif;
         }
@@ -48,23 +47,20 @@
         .nav-tabs button.active { background: #27ae60; border-bottom: 4px solid #f1c40f; }
 
         .info-section {
-            background-color: #eaf2f8; padding: 10px 20px; /* पॅडिंग कमी केले */
+            background-color: #eaf2f8; padding: 10px 20px;
             border-bottom: 2px solid #d4e6f1; display: flex;
-            justify-content: space-between; flex-wrap: wrap; gap: 10px; /* गॅप कमी केला */
+            justify-content: space-between; flex-wrap: wrap; gap: 10px;
         }
 
-        .form-group { margin-bottom: 5px; flex: 1; min-width: 200px; } /* मार्जिन कमी केले */
+        .form-group { margin-bottom: 5px; flex: 1; min-width: 200px; }
         .form-group label { display: block; font-weight: 600; margin-bottom: 2px; color: #2c3e50; }
         
-        /* Number Input Arrows Remove CSS */
         input[type=number]::-webkit-inner-spin-button, 
         input[type=number]::-webkit-outer-spin-button { 
             -webkit-appearance: none; 
             margin: 0; 
         }
-        input[type=number] {
-            -moz-appearance: textfield;
-        }
+        input[type=number] { -moz-appearance: textfield; }
 
         .form-group input, .form-group select {
             width: 100%; padding: 8px; border: 1px solid #ccc;
@@ -72,15 +68,9 @@
             font-size: 15px; box-sizing: border-box; background-color: #fff;
         }
 
-        .evaluation-section, .dashboard-section { padding: 15px 25px 25px 25px; } /* वरील पॅडिंग कमी केले */
-        .home-section { padding: 25px; }
+        .evaluation-section, .dashboard-section { padding: 15px 25px 25px 25px; }
+        .home-section { padding: 25px; display: block; text-align: center; padding: 40px 20px; }
         .dashboard-section, .evaluation-section { display: none; }
-        
-        .home-section { 
-            display: block; 
-            text-align: center; 
-            padding: 40px 20px; 
-        }
 
         .section-title {
             background-color: #2980b9; color: white; padding: 10px 15px;
@@ -136,8 +126,7 @@
         .rank-2 { background-color: #f9e79f !important; }
         .rank-3 { background-color: #fadbd8 !important; }
         
-        /* नवीन Summary Cards CSS */
-        .summary-cards { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; } /* मार्जिन कमी केले */
+        .summary-cards { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 15px; }
         .summary-card { flex: 1; min-width: 200px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); text-align: center; border-left: 6px solid #ccc; }
         .summary-card.green { border-left-color: #27ae60; background-color: #eafaf1; }
         .summary-card.orange { border-left-color: #f39c12; background-color: #fef5e7; }
@@ -145,33 +134,22 @@
         .summary-card h4 { margin: 0 0 5px 0; color: #555; font-size: 15px; font-weight: bold; }
         .summary-card .stat { font-size: 24px; font-weight: bold; color: #2c3e50; }
 
-        /* Print Styles for A4 Size PDF */
         @media print {
             body { background: white; padding: 0; margin: 0; font-size: 10pt; }
             .container { box-shadow: none; max-width: 100%; border-radius: 0; padding: 0; margin: 0;}
-            
-            .nav-tabs, .submit-btn, .clear-btn, .export-btn, .pdf-section, #homeSection, .action-buttons, .summary-cards { 
-                display: none !important; 
-            }
-            
+            .nav-tabs, .submit-btn, .clear-btn, .export-btn, .pdf-section, #homeSection, .action-buttons, .summary-cards { display: none !important; }
             .header { background-color: white !important; color: black !important; padding: 10px 0; border-bottom: 2px solid #ccc; page-break-after: avoid;}
             .header h1, .header h2, .header p { color: black !important; margin: 5px 0; }
-            
             #formSection, #dashboardSection { display: block !important; padding: 10px 0; }
-            
             input, select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-weight: bold; padding: 0 !important; }
             textarea { border: 1px solid #ccc !important; padding: 5px !important; resize: none; overflow: hidden; background: transparent !important; }
-            
             table { margin-bottom: 15px; page-break-inside: auto; }
             tr { page-break-inside: avoid; page-break-after: auto; }
             th { background-color: #f2f2f2 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 5px;}
             td { padding: 5px; }
-            
             .section-title { background-color: #e0e0e0 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; border: 1px solid #ccc; padding: 5px; margin-bottom: 5px; }
             .dashboard-table th { background-color: #f2f2f2 !important; color: black !important; }
-            
             .signature-section { margin-top: 30px !important; }
-            
             @page { size: A4 portrait; margin: 10mm; }
         }
     </style>
@@ -192,7 +170,6 @@
     </div>
     
     <div id="homeSection" class="home-section">
-
         <h2 style="color: #2c3e50; font-size: 26px; margin-top: 0;">मूल्यमापन प्रणालीमध्ये आपले स्वागत आहे!</h2>
         <p style="font-size: 18px; color: #555; max-width: 700px; margin: 10px auto;">
             शाळांच्या मध्यान्ह भोजन योजनेचे पारदर्शक आणि अचूक मूल्यमापन करण्यासाठी या डिजिटल प्रपत्राचा वापर करा.
@@ -214,7 +191,6 @@
              <button class="export-btn" style="display:inline-block; width:auto; padding: 10px 20px; background-color: #8e44ad;" onclick="window.print()">📄 फॉर्म PDF मध्ये सेव्ह करा (A4 Print)</button>
         </div>
 
-        <!-- नवीन Summary Cards Section -->
         <div class="summary-cards">
             <div class="summary-card green">
                 <h4>झालेल्या एकूण भेटी</h4>
@@ -232,7 +208,6 @@
 
         <form id="evaluationForm" onsubmit="saveData(event)">
             <div class="info-section">
-                <!-- पथक प्रमुख आणि सहाय्यक यांचे नाव -->
                 <div class="form-group" style="flex: 100%;">
                     <label for="evaluatorName">पथक प्रमुख:</label>
                     <input type="text" id="evaluatorName" value="भूषणकुमार बालकदास मेश्राम (केंद्र समन्वयक, समूह साधन केंद्र पिंपळगाव / स)" required readonly style="background-color: #e8e8e8; font-weight: bold;">
@@ -342,7 +317,6 @@
                     </tbody>
                 </table>
 
-                <!-- नवीन शेरा (Remarks) कॉलम -->
                 <div class="section-title"><span>E) शेरा (Remarks)</span></div>
                 <div style="padding: 15px; border: 1px solid #ddd; border-radius: 5px; margin-bottom: 20px; background: #fff;">
                     <textarea id="sheraText" rows="3" style="width: 100%; border: none; font-family: 'Mukta', sans-serif; font-size: 15px; resize: none;" placeholder="येथे आपला शेरा नोंदवा..."></textarea>
@@ -352,7 +326,6 @@
                     एकूण प्राप्त गुण (A + B + C + D): <span id="grandTotal">0</span> / 100
                 </div>
 
-                <!-- स्वाक्षरी (फक्त प्रिंट करताना दिसेल किंवा शेवटी राहील) -->
                 <div class="signature-section" style="display: flex; justify-content: space-between; margin-top: 40px; margin-bottom: 30px; padding: 0 20px;">
                     <div style="text-align: center;">
                         <p>_______________________</p>
@@ -375,7 +348,6 @@
     <div id="dashboardSection" class="dashboard-section">
         <div class="action-buttons">
             <button class="clear-btn" onclick="clearData()">🗑️ सर्व डाटा पुसून टाका</button>
-            <!-- Live Sync Button Added Here -->
             <button class="export-btn" id="syncBtn" style="background-color: #f39c12; margin-right: 10px;" onclick="syncLiveData()">🔄 Live Sync (डेटा रिफ्रेश करा)</button>
             <button class="export-btn" onclick="exportToExcel()">📊 Excel मध्ये डाउनलोड करा</button>
             <button class="export-btn" style="background-color: #8e44ad;" onclick="window.print()">📄 डॅशबोर्ड PDF मध्ये सेव्ह करा (A4 Print)</button>
@@ -403,7 +375,7 @@
 
 <script>
     // ========= ⚠️ येथे तुमची Apps Script Web App Link टाका ⚠️ =========
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx_V1SkNO-nqHCxPcKtG4teWRdVsIoDoCjHm4U9zuFbeV1UQDaxLT0kI2yMJsXTsZcs/exec"; 
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbynXiMrnQXZ2vlZJOP2H6ciONqJUpyXdlehSsFasnc0eawk2MebN4kWxKuE1Kgxoh-8/exec"; 
     // =====================================================================
 
     const schoolNamesMap = {
@@ -429,7 +401,6 @@
         updateTopSummary();
     }
 
-    // नवीन टॉप समरी अपडेट फंक्शन
     function updateTopSummary() {
         const records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
         document.getElementById('statTotalVisits').innerText = records.length;
@@ -497,7 +468,6 @@
         updateVisitTag();
     }
 
-    // डॅशबोर्ड मधून प्रपत्र थेट पाहण्यासाठी फंक्शन
     function viewForm(schoolId, visitNumber) {
         switchTab('form');
         document.getElementById('schoolName').value = schoolId;
@@ -517,7 +487,6 @@
         document.getElementById('visitNumber').value = visitNumber;
         updateVisitTag(); 
         
-        // फॉर्म ओपन झाल्यावर पेज वरच्या बाजूला स्क्रोल करा
         window.scrollTo(0, 0);
     }
 
@@ -648,6 +617,7 @@
         let inputValues = Array.from(document.querySelectorAll('.marks-input')).map(input => input.value);
         let sheraValue = document.getElementById('sheraText') ? document.getElementById('sheraText').value : "";
 
+        // Update local storage
         records = records.filter(r => !(r.school === schoolId && r.visit === visitNumber));
         records.push({
             school: schoolId,
@@ -659,9 +629,11 @@
         });
         localStorage.setItem('mdmEvaluations', JSON.stringify(records));
 
+        // तयार केलेला Payload (येथे schoolId आणि inputValues पण जोडले आहेत)
         const payload = {
             evaluatorName: evaluatorName,
             schoolName: schoolNameText,
+            schoolId: schoolId, 
             visitNumber: visitNumber,
             visitDate: visitDate,
             totalA: marks.totalA,
@@ -669,22 +641,31 @@
             totalC: marks.totalC,
             totalD: marks.totalD,
             grandTotal: marks.grandTotal,
-            shera: sheraValue
+            shera: sheraValue,
+            inputValues: inputValues
         };
 
         const btn = document.getElementById("submitBtn");
         btn.innerText = "⏳ Cloud वर डेटा पाठवत आहे...";
         btn.disabled = true;
 
-        if(APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "येथे_तुमची_वेब_अॅप_लिंक_टाका") {
+        if(APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+            // CORS चा प्रॉब्लेम टाळण्यासाठी text/plain चा वापर केला आहे.
             fetch(APPS_SCRIPT_URL, {
                 method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(payload)
-            }).then(() => {
-                resetAndGoToDashboard();
-            }).catch(e => {
+            })
+            .then(res => res.json())
+            .then(data => {
+                if(data.status === "success") {
+                    resetAndGoToDashboard();
+                } else {
+                    alert("Cloud वर सेव्ह करताना एरर: " + data.message);
+                    resetAndGoToDashboard();
+                }
+            })
+            .catch(e => {
                 console.error("Cloud Sync Error", e);
                 alert("लोकलमध्ये सेव्ह झाले, पण Cloud वर पाठवताना अडचण आली. इंटरनेट तपासा.");
                 resetAndGoToDashboard();
@@ -699,24 +680,30 @@
         const btn = document.getElementById("syncBtn");
         btn.innerText = "🔄 सिंक होत आहे...";
         
-        // This will fetch from the Cloud if the Apps Script supports GET method returning JSON.
-        fetch(APPS_SCRIPT_URL)
-            .then(response => response.json())
+        // Fetch URL ला timestamp दिला जेणेकरून जुना cache डेटा येऊ नये
+        const fetchUrl = APPS_SCRIPT_URL + (APPS_SCRIPT_URL.includes("?") ? "&" : "?") + "t=" + new Date().getTime();
+
+        fetch(fetchUrl)
+            .then(response => {
+                if(!response.ok) throw new Error("Network response was not ok");
+                return response.json();
+            })
             .then(data => {
-                if(data && data.length > 0) {
-                    // Update local storage with live cloud data if valid
+                if(data && Array.isArray(data)) {
                     localStorage.setItem('mdmEvaluations', JSON.stringify(data));
+                    renderDashboard();
+                    btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
+                    alert("क्लाउड वरून डेटा यशस्वीरित्या सिंक झाला!");
+                    updateTopSummary();
+                } else {
+                    throw new Error("Invalid Data Format");
                 }
-                renderDashboard();
-                btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
-                alert("क्लाउड वरून डेटा यशस्वीरित्या सिंक झाला!");
-                updateTopSummary();
             })
             .catch(e => {
                 console.error("Sync Error:", e);
                 renderDashboard();
                 btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
-                alert("सध्या लोकल डेटा दाखवत आहे (Cloud Live Sync साठी Apps Script मध्ये GET Method आवश्यक आहे).");
+                alert("डेटा सिंक करताना अडचण आली. कृपया तुमची वेब ऍप लिंक आणि इंटरनेट तपासा.");
             });
     }
 
@@ -755,7 +742,6 @@
         records.forEach(rec => {
             let schoolObj = schoolStats.find(s => s.id === rec.school);
             if(schoolObj) {
-                // गुणांना क्लिकेबल बनवले आहे
                 let displayMarks = `<a href="javascript:void(0)" onclick="viewForm('${rec.school}', '${rec.visit}')" style="color: #2980b9; text-decoration: underline; font-weight: bold;" title="प्रपत्र पहा">${rec.marks}</a>`;
                 
                 if(rec.visit === '1') { schoolObj.v1 = displayMarks; schoolObj.total += rec.marks; }
