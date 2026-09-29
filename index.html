@@ -95,18 +95,25 @@
             margin-bottom: 25px; border-radius: 5px;
         }
 
-        .submit-btn, .export-btn, .pdf-btn {
-            display: block; width: 100%; background-color: #27ae60; color: white;
+        .submit-btn, .export-btn, .pdf-btn, .danger-btn, .final-btn {
+            display: block; width: 100%; color: white;
             border: none; padding: 15px; font-size: 18px; font-weight: bold;
             border-radius: 5px; cursor: pointer; transition: 0.3s;
             font-family: 'Mukta', sans-serif; margin-bottom: 10px; text-decoration: none;
             text-align: center;
         }
+        .submit-btn { background-color: #27ae60; }
         .submit-btn:hover { background-color: #2ecc71; }
         .submit-btn:disabled { background-color: #95a5a6; cursor: not-allowed; }
         
         .export-btn { background-color: #3498db; }
         .export-btn:hover { background-color: #2980b9; }
+
+        .danger-btn { background-color: #e74c3c; width: auto; display: inline-block; padding: 10px 20px; }
+        .danger-btn:hover { background-color: #c0392b; }
+
+        .final-btn { background-color: #2c3e50; width: auto; display: inline-block; padding: 10px 20px; }
+        .final-btn:hover { background-color: #1a252f; }
 
         .pdf-btn { display: inline-block; width: auto; padding: 10px 20px; font-size: 16px; margin: 10px 5px; }
         .pdf-btn-1 { background-color: #e67e22; }
@@ -133,6 +140,12 @@
         .summary-card.purple { border-left-color: #8e44ad; background-color: #f4ecf8; }
         .summary-card h4 { margin: 0 0 5px 0; color: #555; font-size: 15px; font-weight: bold; }
         .summary-card .stat { font-size: 24px; font-weight: bold; color: #2c3e50; }
+
+        /* Lock state styling */
+        .locked-form { pointer-events: none; opacity: 0.6; }
+
+        /* Sync Status Indicator */
+        #syncStatusIndicator { font-size: 14px; font-weight: bold; color: #27ae60; display: none; margin-left: 10px; }
 
         @media print {
             body { background: white; padding: 0; margin: 0; font-size: 10pt; }
@@ -166,26 +179,41 @@
     <div class="nav-tabs">
         <button id="tabHomeBtn" class="active" onclick="switchTab('home')">🏠 मुख्य पान</button>
         <button id="tabFormBtn" onclick="switchTab('form')">📝 मुल्यांकन प्रपत्र भरा</button>
-        <button id="tabDashBtn" onclick="switchTab('dashboard')">📊 रँकिंग (Live Sync) व अहवाल</button>
+        <button id="tabDashBtn" onclick="switchTab('dashboard')">📊 रँकिंग व अहवाल (Live Sync)</button>
     </div>
     
+    <!-- मुख्य पान -->
     <div id="homeSection" class="home-section">
         <h2 style="color: #2c3e50; font-size: 26px; margin-top: 0;">मूल्यमापन प्रणालीमध्ये आपले स्वागत आहे!</h2>
         <p style="font-size: 18px; color: #555; max-width: 700px; margin: 10px auto;">
             शाळांच्या मध्यान्ह भोजन योजनेचे पारदर्शक आणि अचूक मूल्यमापन करण्यासाठी या डिजिटल प्रपत्राचा वापर करा.
         </p>
         
+        <!-- परिपत्रके आणि PDF विभाग (IndexedDB) -->
         <div class="pdf-section" style="background: #eaf2f8; padding: 20px; border-radius: 8px; margin: 25px auto; max-width: 800px; border-left: 5px solid #2980b9;">
             <h3 style="color: #2c3e50; margin-top: 0; margin-bottom: 10px;">योजनेची परिपत्रके व मार्गदर्शक सूचना (PDF)</h3>
             <p style="color: #555; font-size: 16px; margin-bottom: 15px;">खालील लिंकवर क्लिक करून योजनेची अधिकृत परिपत्रके डाउनलोड करा किंवा वाचा:</p>
-            <a href="Bhandara_Nutrition_Excellence_Blueprint.pdf" target="_blank" class="pdf-btn pdf-btn-1">📄 Nutrition Excellence Blueprint</a>
-            <a href="उत्कृष्ट_मध्यान्ह_भोजन_योजना_उपक्रम (2).pdf" target="_blank" class="pdf-btn pdf-btn-2">📄 उत्कृष्ट मध्यान्ह भोजन योजना उपक्रम</a>
+            
+            <div>
+                <a href="Bhandara_Nutrition_Excellence_Blueprint.pdf" target="_blank" class="pdf-btn pdf-btn-1">📄 Nutrition Excellence Blueprint</a>
+                <a href="उत्कृष्ट_मध्यान्ह_भोजन_योजना_उपक्रम (2).pdf" target="_blank" class="pdf-btn pdf-btn-2">📄 उत्कृष्ट मध्यान्ह भोजन योजना उपक्रम</a>
+            </div>
+            
+            <div id="uploadedCircularsContainer" style="margin-top: 15px;"></div>
+
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #bdc3c7; text-align: left;">
+                <h4 style="margin: 0 0 10px 0; color: #34495e;">+ नवीन मोठे परिपत्रक अपलोड करा (कोणत्याही आकाराचे PDF)</h4>
+                <input type="text" id="newCircName" placeholder="परिपत्रकाचे नाव (उदा. शासन निर्णय २०२२)" style="padding: 8px; width: 40%; border: 1px solid #ccc; border-radius: 4px;">
+                <input type="file" id="newCircFile" accept="application/pdf" style="padding: 8px;">
+                <button onclick="uploadLargeCircular()" class="submit-btn" style="width:auto; display:inline-block; padding: 8px 15px; font-size: 14px; margin:0;">अपलोड (Save)</button>
+            </div>
         </div>
 
         <br>
         <button class="submit-btn" style="width:auto; display:inline-block; margin-top: 10px; padding: 12px 35px; border-radius: 5px; font-size: 18px;" onclick="switchTab('form')">मूल्यमापन सुरू करा ➔</button>
     </div>
 
+    <!-- प्रपत्र (Form) विभाग -->
     <div id="formSection" class="evaluation-section">
         <div class="action-buttons" style="margin-bottom: 10px; text-align: right;">
              <button class="export-btn" style="display:inline-block; width:auto; padding: 10px 20px; background-color: #8e44ad;" onclick="window.print()">📄 फॉर्म PDF मध्ये सेव्ह करा (A4 Print)</button>
@@ -206,7 +234,7 @@
             </div>
         </div>
 
-        <form id="evaluationForm" onsubmit="saveData(event)">
+        <form id="evaluationForm" onsubmit="saveData(event, false)">
             <div class="info-section">
                 <div class="form-group" style="flex: 100%;">
                     <label for="evaluatorName">पथक प्रमुख:</label>
@@ -255,12 +283,23 @@
                     <input type="date" id="visitDate" required>
                 </div>
             </div>
+            
+            <!-- Edit / Delete Controls -->
+            <div id="editControls" style="display: none; background: #fdf2e9; border: 1px solid #e67e22; padding: 10px; margin-top: 15px; border-radius: 5px; text-align: right;">
+                <span style="float: left; font-weight: bold; color: #d35400; margin-top: 10px;">ही एन्ट्री आधीच सेव्ह केलेली आहे (Draft).</span>
+                <button type="button" onclick="deleteCurrentEntry()" class="danger-btn">🗑️ ही एन्ट्री डिलीट करा</button>
+            </div>
+            
+            <!-- Final Locked Status Message -->
+            <div id="lockedMessage" style="display: none; background: #eaeded; border: 1px solid #7f8c8d; padding: 15px; margin-top: 15px; border-radius: 5px; text-align: center; font-size: 18px; font-weight: bold; color: #2c3e50;">
+                🔒 ही एन्ट्री फायनल (Final) केलेली आहे. आता यात कोणताही बदल करता येणार नाही.
+            </div>
 
             <div style="text-align: center; margin-top: 10px;">
                 <span id="dynamicVisitTag" style="background: #e74c3c; color: white; padding: 6px 15px; border-radius: 20px; font-size: 16px; font-weight: bold; display: inline-block;">प्रथम महिना भेट @ प्रारंभिक स्थिती व अनुपालन तपासणी</span>
             </div>
 
-            <div style="display:block; padding: 15px 0;">
+            <div id="formBodyWrapper" style="display:block; padding: 15px 0;">
                 <div class="section-title"><span>A) आहार आणि चव</span><span>एकूण गुण: 35</span></div>
                 <table>
                     <thead><tr><th width="10%">अ.क्र.</th><th width="55%">मूल्यमापन निकष</th><th width="15%" style="text-align:center;">कमाल गुण</th><th width="20%" style="text-align:center;">प्राप्त गुण</th></tr></thead>
@@ -339,18 +378,23 @@
                     </div>
                 </div>
 
-                <button type="submit" id="submitBtn" class="submit-btn">💾 माहिती सेव्ह करा व Cloud वर पाठवा</button>
+                <!-- Submit and Final Buttons -->
+                <div id="submitButtonsArea" style="display: flex; gap: 10px;">
+                    <button type="submit" id="submitBtn" class="submit-btn">💾 माहिती सेव्ह करा (Draft)</button>
+                    <button type="button" id="finalBtn" class="final-btn" onclick="saveData(event, true)">🔒 फायनल सबमिट करा (Lock)</button>
+                </div>
             </div>
         </form>
     </div>
 
-    <!-- TAB 2: DASHBOARD SECTION -->
+    <!-- TAB 3: DASHBOARD SECTION -->
     <div id="dashboardSection" class="dashboard-section">
-        <div class="action-buttons">
-            <button class="clear-btn" onclick="clearData()">🗑️ सर्व डाटा पुसून टाका</button>
-            <button class="export-btn" id="syncBtn" style="background-color: #f39c12; margin-right: 10px;" onclick="syncLiveData()">🔄 Live Sync (डेटा रिफ्रेश करा)</button>
-            <button class="export-btn" onclick="exportToExcel()">📊 Excel मध्ये डाउनलोड करा</button>
-            <button class="export-btn" style="background-color: #8e44ad;" onclick="window.print()">📄 डॅशबोर्ड PDF मध्ये सेव्ह करा (A4 Print)</button>
+        <div class="action-buttons" style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-bottom: 15px;">
+            <button class="export-btn" id="syncBtn" style="background-color: #f39c12; flex: 1;" onclick="syncLiveData(false)">🔄 Live Sync (डेटा रिफ्रेश करा)</button>
+            <span id="syncStatusIndicator">✔️ Cloud Sync Updated</span>
+            <button class="export-btn" onclick="exportToExcel()" style="flex: 1;">📊 Excel मध्ये डाउनलोड करा</button>
+            <button class="export-btn" style="background-color: #8e44ad; flex: 1;" onclick="window.print()">📄 डॅशबोर्ड PDF मध्ये सेव्ह करा</button>
+            <button class="clear-btn" onclick="clearData()" style="flex: 1;">🗑️ सर्व डाटा पुसून टाका</button>
         </div>
         
         <h3 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; margin-top:0;">गुणानुक्रमे शाळांची स्थिती (Live रँकिंग)</h3>
@@ -375,8 +419,100 @@
 
 <script>
     // ========= ⚠️ येथे तुमची Apps Script Web App Link टाका ⚠️ =========
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzw1UsUW_xkU76dFI26bGmSPDqKeUIg5-CHn8JLgVSK4PEwWn9qu4POWTnwXImgkCF3/exec"; 
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwrqx1DQboqyjpK2yFVkDQDBnfUjV2I4J8IMDZa_bLnCHI--vk-NDEBr8VfkTuYsMkGMA/exec"; 
     // =====================================================================
+
+    // --- IndexedDB for LARGE Circular Uploads (मोठे परिपत्रक) ---
+    const dbName = "MDMCircularsDB";
+    let db;
+    
+    const request = indexedDB.open(dbName, 1);
+    request.onupgradeneeded = function(event) {
+        db = event.target.result;
+        db.createObjectStore("circulars", { keyPath: "id", autoIncrement: true });
+    };
+    request.onsuccess = function(event) {
+        db = event.target.result;
+        renderCirculars();
+    };
+    request.onerror = function(event) {
+        console.error("IndexedDB Error:", event.target.errorCode);
+    };
+
+    function uploadLargeCircular() {
+        const fileInput = document.getElementById('newCircFile');
+        const nameInput = document.getElementById('newCircName').value.trim();
+
+        if (fileInput.files.length === 0 || !nameInput) {
+            alert("कृपया परिपत्रकाचे नाव टाका आणि PDF फाईल निवडा.");
+            return;
+        }
+
+        const file = fileInput.files[0];
+        if (file.type !== "application/pdf") {
+            alert("फक्त PDF फाईल अपलोड करा.");
+            return;
+        }
+        
+        const transaction = db.transaction(["circulars"], "readwrite");
+        const store = transaction.objectStore("circulars");
+        
+        const circularData = {
+            name: nameInput,
+            fileObj: file
+        };
+        
+        const addRequest = store.add(circularData);
+        addRequest.onsuccess = function() {
+            alert("मोठे परिपत्रक यशस्वीरित्या डेटाबेसमध्ये सेव्ह झाले!");
+            document.getElementById('newCircName').value = "";
+            document.getElementById('newCircFile').value = "";
+            renderCirculars();
+        };
+        addRequest.onerror = function() {
+            alert("परिपत्रक सेव्ह करताना अडचण आली.");
+        };
+    }
+
+    function renderCirculars() {
+        if (!db) return;
+        
+        const container = document.getElementById('uploadedCircularsContainer');
+        container.innerHTML = "";
+        
+        const transaction = db.transaction(["circulars"], "readonly");
+        const store = transaction.objectStore("circulars");
+        const getCursorRequest = store.openCursor();
+        
+        getCursorRequest.onsuccess = function(event) {
+            const cursor = event.target.result;
+            if (cursor) {
+                const c = cursor.value;
+                const fileURL = URL.createObjectURL(c.fileObj);
+                
+                const div = document.createElement('div');
+                div.style = "display:inline-block; margin: 10px 5px; position:relative;";
+                div.innerHTML = `
+                    <a href="${fileURL}" download="${c.name}.pdf" target="_blank" class="pdf-btn" style="background-color: #16a085;">📄 ${c.name}</a>
+                    <button type="button" onclick="deleteCircular(${cursor.key})" style="position:absolute; top:-5px; right:-5px; background:red; color:white; border:none; border-radius:50%; width:22px; height:22px; cursor:pointer; font-size:12px; font-weight:bold;" title="डिलीट करा">X</button>
+                `;
+                container.appendChild(div);
+                cursor.continue();
+            }
+        };
+    }
+
+    function deleteCircular(id) {
+        if(confirm("हे परिपत्रक कायमचे डिलीट करायचे आहे का?")) {
+            const transaction = db.transaction(["circulars"], "readwrite");
+            const store = transaction.objectStore("circulars");
+            store.delete(id);
+            transaction.oncomplete = function() {
+                renderCirculars();
+            };
+        }
+    }
+    // ----------------------------------------------------
 
     const schoolNamesMap = {
         "1": "जि.प. प्राथमिक शाळा, मुरमाडी (तूप) (केंद्र शाळा)",
@@ -419,7 +555,7 @@
             const isEditing = schoolRecords.some(r => r.visit === visitDropdown.value);
             
             if(isEditing) {
-                document.getElementById('statSchoolVisit').innerText = visitDropdown.value + " वी भेट (संपादित)";
+                document.getElementById('statSchoolVisit').innerText = visitDropdown.value + " वी भेट (नोंदवलेली)";
             } else {
                 const nextVisit = schoolRecords.length + 1;
                 document.getElementById('statSchoolVisit').innerText = nextVisit <= 3 ? nextVisit + " वी भेट चालू" : "पूर्ण (3 भेटी)";
@@ -486,7 +622,6 @@
 
         document.getElementById('visitNumber').value = visitNumber;
         updateVisitTag(); 
-        
         window.scrollTo(0, 0);
     }
 
@@ -498,26 +633,68 @@
         const records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
         const record = records.find(r => r.school === schoolId && r.visit === visitNumber);
 
-        if (record && record.inputValues) {
-            let inputs = document.querySelectorAll('.marks-input');
-            inputs.forEach((input, index) => {
-                input.value = record.inputValues[index] || '';
-            });
+        const formBodyWrapper = document.getElementById('formBodyWrapper');
+        const submitButtonsArea = document.getElementById('submitButtonsArea');
+        const lockedMessage = document.getElementById('lockedMessage');
+        const editControls = document.getElementById('editControls');
+
+        if (record) {
+            if (record.inputValues) {
+                let inputs = document.querySelectorAll('.marks-input');
+                inputs.forEach((input, index) => {
+                    input.value = record.inputValues[index] || '';
+                });
+            }
             document.getElementById('visitDate').value = record.date || '';
             if (document.getElementById('sheraText')) {
                 document.getElementById('sheraText').value = record.shera || '';
             }
-            document.getElementById('submitBtn').innerText = "💾 बदल सेव्ह करा (Update)";
+            
+            // Check if Final (Locked)
+            if (record.isFinal) {
+                formBodyWrapper.classList.add('locked-form');
+                submitButtonsArea.style.display = 'none';
+                editControls.style.display = 'none'; // Cannot delete if final
+                lockedMessage.style.display = 'block';
+            } else {
+                formBodyWrapper.classList.remove('locked-form');
+                submitButtonsArea.style.display = 'flex';
+                editControls.style.display = 'block'; // Allow delete
+                lockedMessage.style.display = 'none';
+                document.getElementById('submitBtn').innerText = "💾 बदल सेव्ह करा (Update Draft)";
+            }
         } else {
+            // New Entry / Reset
             document.querySelectorAll('.marks-input').forEach(input => input.value = '');
             document.getElementById('visitDate').value = '';
             if (document.getElementById('sheraText')) {
                 document.getElementById('sheraText').value = '';
             }
-            document.getElementById('submitBtn').innerText = "💾 माहिती सेव्ह करा व Cloud वर पाठवा";
+            
+            formBodyWrapper.classList.remove('locked-form');
+            submitButtonsArea.style.display = 'flex';
+            editControls.style.display = 'none';
+            lockedMessage.style.display = 'none';
+            document.getElementById('submitBtn').innerText = "💾 माहिती सेव्ह करा (Draft)";
         }
+        
         calculateTotals();
         updateTopSummary();
+    }
+
+    function deleteCurrentEntry() {
+        if(confirm("तुम्हाला खात्री आहे का? ही एन्ट्री डिलीट झाल्यावर पुन्हा मिळणार नाही.")) {
+            const schoolId = document.getElementById('schoolName').value;
+            const visitNumber = document.getElementById('visitNumber').value;
+            let records = JSON.parse(localStorage.getItem('mdmEvaluations')) || [];
+            
+            records = records.filter(r => !(r.school === schoolId && r.visit === visitNumber));
+            localStorage.setItem('mdmEvaluations', JSON.stringify(records));
+            
+            alert("एन्ट्री डिलीट केली आहे.");
+            checkVisitEligibility();
+            switchTab('dashboard');
+        }
     }
 
     function updateVisitTag() {
@@ -545,6 +722,7 @@
         updateTopSummary();
     }
 
+    // टॅब स्विच फंक्शन: Dashboard वर गेल्यावर "Auto Cloud Sync" होईल.
     function switchTab(tabName) {
         document.getElementById('homeSection').style.display = tabName === 'home' ? 'block' : 'none';
         document.getElementById('formSection').style.display = tabName === 'form' ? 'block' : 'none';
@@ -556,6 +734,10 @@
 
         if(tabName === 'dashboard') {
             renderDashboard();
+            // Silent Live Auto Sync when opening Dashboard
+            if (APPS_SCRIPT_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+                syncLiveData(true);
+            }
         }
         if(tabName === 'form') {
             updateTopSummary();
@@ -594,8 +776,18 @@
         return { grandTotal, totalA, totalB, totalC, totalD };
     }
 
-    function saveData(event) {
-        event.preventDefault();
+    function saveData(event, makeFinal = false) {
+        if(event) event.preventDefault();
+        
+        if (!document.getElementById('evaluationForm').checkValidity()) {
+            document.getElementById('evaluationForm').reportValidity();
+            return;
+        }
+
+        if(makeFinal && !confirm("तुम्हाला खात्री आहे का? एकदा फायनल केल्यावर या माहितीत कधीही बदल करता येणार नाही.")) {
+            return;
+        }
+
         const schoolId = document.getElementById('schoolName').value;
         const schoolNameText = schoolNamesMap[schoolId];
         const visitNumber = document.getElementById('visitNumber').value;
@@ -625,11 +817,12 @@
             date: visitDate,
             marks: marks.grandTotal,
             inputValues: inputValues,
-            shera: sheraValue
+            shera: sheraValue,
+            isFinal: makeFinal
         });
         localStorage.setItem('mdmEvaluations', JSON.stringify(records));
 
-        // तयार केलेला Payload (येथे schoolId आणि inputValues पण जोडले आहेत)
+        // Cloud Payload
         const payload = {
             evaluatorName: evaluatorName,
             schoolName: schoolNameText,
@@ -642,15 +835,16 @@
             totalD: marks.totalD,
             grandTotal: marks.grandTotal,
             shera: sheraValue,
-            inputValues: inputValues
+            inputValues: inputValues,
+            isFinal: makeFinal
         };
 
-        const btn = document.getElementById("submitBtn");
-        btn.innerText = "⏳ Cloud वर डेटा पाठवत आहे...";
-        btn.disabled = true;
+        const btn = makeFinal ? document.getElementById("finalBtn") : document.getElementById("submitBtn");
+        btn.innerText = "⏳ Cloud वर पाठवत आहे...";
+        document.getElementById("submitBtn").disabled = true;
+        document.getElementById("finalBtn").disabled = true;
 
         if(APPS_SCRIPT_URL && APPS_SCRIPT_URL !== "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
-            // CORS चा प्रॉब्लेम टाळण्यासाठी text/plain चा वापर केला आहे.
             fetch(APPS_SCRIPT_URL, {
                 method: "POST",
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
@@ -675,12 +869,18 @@
         }
     }
     
-    // Live Sync Functionality
-    function syncLiveData() {
+    // --- LIVE CLOUD SYNC Functionality ---
+    function syncLiveData(isSilent = false) {
         const btn = document.getElementById("syncBtn");
-        btn.innerText = "🔄 सिंक होत आहे...";
+        const statusInd = document.getElementById("syncStatusIndicator");
         
-        // Fetch URL ला timestamp दिला जेणेकरून जुना cache डेटा येऊ नये
+        if (APPS_SCRIPT_URL === "YOUR_GOOGLE_APPS_SCRIPT_URL_HERE") {
+            if (!isSilent) alert("Cloud Sync साठी APPS_SCRIPT_URL सेट करणे आवश्यक आहे.");
+            return;
+        }
+
+        if (!isSilent) btn.innerText = "🔄 सिंक होत आहे...";
+        
         const fetchUrl = APPS_SCRIPT_URL + (APPS_SCRIPT_URL.includes("?") ? "&" : "?") + "t=" + new Date().getTime();
 
         fetch(fetchUrl)
@@ -690,10 +890,18 @@
             })
             .then(data => {
                 if(data && Array.isArray(data)) {
+                    // Cloud वरून आलेला नवीन डेटा Local Storage मध्ये रिप्लेस करणे
                     localStorage.setItem('mdmEvaluations', JSON.stringify(data));
                     renderDashboard();
-                    btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
-                    alert("क्लाउड वरून डेटा यशस्वीरित्या सिंक झाला!");
+                    
+                    if (!isSilent) {
+                        btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
+                        alert("क्लाउड वरून डेटा यशस्वीरित्या सिंक झाला!");
+                    } else {
+                        // सायलेंट (Auto) सिंक यशस्वी झाल्यावर छोटा इंडिकेटर दाखवा
+                        statusInd.style.display = "inline";
+                        setTimeout(() => { statusInd.style.display = "none"; }, 3000);
+                    }
                     updateTopSummary();
                 } else {
                     throw new Error("Invalid Data Format");
@@ -702,16 +910,19 @@
             .catch(e => {
                 console.error("Sync Error:", e);
                 renderDashboard();
-                btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
-                alert("डेटा सिंक करताना अडचण आली. कृपया तुमची वेब ऍप लिंक आणि इंटरनेट तपासा.");
+                if (!isSilent) {
+                    btn.innerText = "🔄 Live Sync (डेटा रिफ्रेश करा)";
+                    alert("डेटा सिंक करताना अडचण आली. कृपया तुमची वेब ऍप लिंक आणि इंटरनेट तपासा.");
+                }
             });
     }
 
     function resetAndGoToDashboard() {
         alert("माहिती यशस्वीरित्या सेव्ह झाली!");
-        const btn = document.getElementById("submitBtn");
-        btn.innerText = "💾 माहिती सेव्ह करा व Cloud वर पाठवा";
-        btn.disabled = false;
+        document.getElementById("submitBtn").disabled = false;
+        document.getElementById("finalBtn").disabled = false;
+        document.getElementById("submitBtn").innerText = "💾 माहिती सेव्ह करा (Draft)";
+        document.getElementById("finalBtn").innerText = "🔒 फायनल सबमिट करा (Lock)";
 
         document.getElementById('evaluationForm').reset();
         document.getElementById('totalMarksA').innerText = "0";
@@ -742,11 +953,12 @@
         records.forEach(rec => {
             let schoolObj = schoolStats.find(s => s.id === rec.school);
             if(schoolObj) {
-                let displayMarks = `<a href="javascript:void(0)" onclick="viewForm('${rec.school}', '${rec.visit}')" style="color: #2980b9; text-decoration: underline; font-weight: bold;" title="प्रपत्र पहा">${rec.marks}</a>`;
+                let lockIcon = rec.isFinal ? "🔒 " : "";
+                let displayMarks = `<a href="javascript:void(0)" onclick="viewForm('${rec.school}', '${rec.visit}')" style="color: #2980b9; text-decoration: underline; font-weight: bold;" title="प्रपत्र पहा">${lockIcon}${rec.marks}</a>`;
                 
-                if(rec.visit === '1') { schoolObj.v1 = displayMarks; schoolObj.total += rec.marks; }
-                if(rec.visit === '2') { schoolObj.v2 = displayMarks; schoolObj.total += rec.marks; }
-                if(rec.visit === '3') { schoolObj.v3 = displayMarks; schoolObj.total += rec.marks; }
+                if(rec.visit === '1') { schoolObj.v1 = displayMarks; schoolObj.total += parseInt(rec.marks); }
+                if(rec.visit === '2') { schoolObj.v2 = displayMarks; schoolObj.total += parseInt(rec.marks); }
+                if(rec.visit === '3') { schoolObj.v3 = displayMarks; schoolObj.total += parseInt(rec.marks); }
             }
         });
 
