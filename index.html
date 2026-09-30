@@ -235,7 +235,6 @@
                     </tbody>
                 </table>
 
-                <!-- B, C, D Tables same as before... -->
                 <div class="section-title"><span>B) स्वच्छता व सुरक्षा</span><span>एकूण गुण: 20</span></div>
                 <table>
                     <thead><tr><th width="10%">अ.क्र.</th><th width="55%">मूल्यमापन निकष</th><th width="15%" style="text-align:center;">कमाल गुण</th><th width="20%" style="text-align:center;">प्राप्त गुण</th></tr></thead>
@@ -336,7 +335,7 @@
     // ==========================================
     // Google Apps Script URL - येथे लिंक पेस्ट करा
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGxL6lIbg5HN4nakVajYOb1W0xjvyqJX9vIzUUAHR6F2jn4zceGPnMCYKSCXzhG9FGbw/exec";
+    const SCRIPT_URL = "येथे_तुमची_WEB_APP_URL_पेस्ट_करा";
 
     let mdmRecords = [];
     let circularsData = [];
@@ -346,13 +345,19 @@
         switchTab('home');
         if(SCRIPT_URL !== "येथे_तुमची_WEB_APP_URL_पेस्ट_करा") {
             fetchData();
+            
+            // ----------------------------------------------------
+            // सायलेंट लाईव्ह सिंक (Silent Live Sync) - दर 15 सेकंदांनी
+            // ----------------------------------------------------
+            setInterval(() => fetchData(true), 15000); 
         } else {
             alert("कृपया कोडमध्ये SCRIPT_URL टाका!");
         }
     };
 
-    async function fetchData() {
-        document.getElementById('loader').style.display = "block";
+    // silent = true असल्यास लोडर दिसणार नाही, फक्त मागून डेटा रिफ्रेश होईल
+    async function fetchData(silent = false) {
+        if(!silent) document.getElementById('loader').style.display = "block";
         try {
             let res = await fetch(SCRIPT_URL + "?action=getData");
             let data = await res.json();
@@ -367,11 +372,11 @@
         } catch(e) {
             console.error("Fetch Error:", e);
         }
-        document.getElementById('loader').style.display = "none";
+        if(!silent) document.getElementById('loader').style.display = "none";
     }
 
     // ==========================================
-    // File Upload to Google Drive
+    // File Upload to Google Drive (CORS Fix)
     // ==========================================
     function uploadLargeCircular() {
         const fileInput = document.getElementById('newCircFile');
@@ -395,15 +400,20 @@
                 base64: base64
             };
             
+            // Added headers and redirect: 'follow' to fix CORS error
             fetch(SCRIPT_URL, {
                 method: "POST",
+                redirect: "follow",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(payload)
             }).then(r => r.json()).then(res => {
                 alert("परिपत्रक सेव्ह झाले!");
                 btn.innerText = "अपलोड (Save)"; btn.disabled = false;
+                document.getElementById('newCircName').value = "";
+                document.getElementById('newCircFile').value = "";
                 fetchData(); // Refresh list
             }).catch(e => {
-                alert("Upload failed.");
+                alert("Upload failed. कृपया खात्री करा की Apps Script Deploy करताना 'Execute as: Me' आणि 'Who has access: Anyone' निवडले आहे.");
                 btn.innerText = "अपलोड (Save)"; btn.disabled = false;
             });
         };
@@ -416,7 +426,7 @@
         
         const defaultPDFs = ["Bhandara_Nutrition_Excellence_Blueprint.pdf","उत्कृष्ट_मध्यान्ह_भोजन_योजना_उपक्रम.pdf","गुणदान तक्ता उत्कृष्ट माध्यान्ह भोजन योजना.pdf","उत्कृष्ट शाळा भेट पथक लाखनी दि. 25.09.2026.pdf"];
         defaultPDFs.forEach(name => {
-            container.innerHTML += `<div style="display:inline-block; margin: 5px;"><a href="#" onclick="alert('हे डेमो परिपत्रक आहे.'); return false;" class="pdf-btn pdf-btn-1" style="background-color: #34495e;">📄 ${name}</a></div>`;
+            container.innerHTML += `<div style="display:inline-block; margin: 5px;"><a href="#" onclick="alert('हे डेमो परिपत्रक आहे. फाईल पाहण्यासाठी कृपया ती खालील अपलोड सेक्शनमधून तुमच्या Google Drive वर अपलोड करा.'); return false;" class="pdf-btn pdf-btn-1" style="background-color: #34495e;">📄 ${name}</a></div>`;
         });
 
         circularsData.forEach(c => {
@@ -518,7 +528,12 @@
         const btn = makeFinal ? document.getElementById("finalBtn") : document.getElementById("submitBtn");
         btn.innerText = "⏳ Saving..."; btn.disabled = true;
 
-        fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) })
+        fetch(SCRIPT_URL, { 
+            method: "POST", 
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify(payload) 
+        })
         .then(r => r.json()).then(res => {
             alert("माहिती यशस्वीरित्या Google Sheet वर सेव्ह झाली!");
             btn.disabled = false;
@@ -536,7 +551,12 @@
         const schoolId = document.getElementById('schoolName').value;
         const visitNumber = document.getElementById('visitNumber').value;
         
-        fetch(SCRIPT_URL, { method: "POST", body: JSON.stringify({ action: "deleteRecord", docId: getDocId(schoolId, visitNumber) }) })
+        fetch(SCRIPT_URL, { 
+            method: "POST", 
+            redirect: "follow",
+            headers: { "Content-Type": "text/plain;charset=utf-8" },
+            body: JSON.stringify({ action: "deleteRecord", docId: getDocId(schoolId, visitNumber) }) 
+        })
         .then(r => r.json()).then(res => {
             alert("डिलीट झाले!");
             fetchData().then(() => { checkVisitEligibility(); switchTab('dashboard'); });
