@@ -335,7 +335,7 @@
     // ==========================================
     // Google Apps Script URL - येथे लिंक पेस्ट करा
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7tFv0OvWI2fb9iu1t9PZ5Uy2EgXLbrm41MtiX9Z92JeeCNj4-iXF1prgAek1nSxku/exec"; // <--- येथे तुमची नवीन लिंक टाका
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7tFv0OvWI2fb9iu1t9PZ5Uy2EgXLbrm41MtiX9Z92JeeCNj4-iXF1prgAek1nSxku/exec"; 
 
     let mdmRecords = [];
     let circularsData = [];
@@ -430,15 +430,14 @@
     function renderCircularsList() {
         const container = document.getElementById('uploadedCircularsContainer');
         container.innerHTML = "";
-        
-        const defaultPDFs = ["Bhandara_Nutrition_Excellence_Blueprint.pdf","उत्कृष्ट_मध्यान्ह_भोजन_योजना_उपक्रम.pdf","गुणदान तक्ता उत्कृष्ट माध्यान्ह भोजन योजना.pdf","उत्कृष्ट शाळा भेट पथक लाखनी दि. 25.09.2026.pdf"];
-        defaultPDFs.forEach(name => {
-            container.innerHTML += `<div style="display:inline-block; margin: 5px;"><a href="#" onclick="alert('हे डेमो परिपत्रक आहे. फाईल पाहण्यासाठी कृपया ती खालील अपलोड सेक्शनमधून तुमच्या Google Drive वर अपलोड करा.'); return false;" class="pdf-btn pdf-btn-1" style="background-color: #34495e;">📄 ${name}</a></div>`;
-        });
 
         circularsData.forEach(c => {
             container.innerHTML += `<div style="display:inline-block; margin: 5px;"><a href="${c.url}" target="_blank" class="pdf-btn pdf-btn-1">📄 ${c.name}</a></div>`;
         });
+        
+        if(circularsData.length === 0) {
+            container.innerHTML = "<p style='color:#7f8c8d; font-size:14px;'>अजून कोणतेही परिपत्रक उपलब्ध नाही.</p>";
+        }
     }
 
     // ==========================================
