@@ -343,7 +343,7 @@
     // Load Data on Startup
     window.onload = function() {
         switchTab('home');
-        if(SCRIPT_URL !== "येथे_तुमची_WEB_APP_URL_पेस्ट_करा") {
+        if(SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwYdD_u6szWrM159jx1ssP8B_E_WSdKuR0kYyXP7UVOIMBX2SrxJJwaa-qXhErBpnpx/exec") {
             fetchData();
             
             // ----------------------------------------------------
@@ -366,8 +366,12 @@
             
             renderDashboard();
             renderCircularsList();
-            if(document.getElementById('formSection').style.display === 'block'){
-                checkVisitEligibility(); updateTopSummary();
+            updateTopSummary();
+
+            // फक्त जर मॅन्युअल रिफ्रेश (silent=false) असेल, तरच फॉर्म रिलोड करा
+            // यामुळे टाईप करत असलेला डेटा पुसला जाणार नाही!
+            if(!silent && document.getElementById('formSection').style.display === 'block'){
+                checkVisitEligibility(); 
             }
         } catch(e) {
             console.error("Fetch Error:", e);
@@ -400,7 +404,6 @@
                 base64: base64
             };
             
-            // Added headers and redirect: 'follow' to fix CORS error
             fetch(SCRIPT_URL, {
                 method: "POST",
                 redirect: "follow",
@@ -440,7 +443,7 @@
     const schoolNamesMap = {
         "1": "जि.प. प्राथमिक शाळा, मुरमाडी (तूप) (केंद्र शाळा)", "2": "जि.प. हायस्कूल, मुरमाडी (तूप)", "3": "जि.प. प्राथमिक शाळा, कोलारी",
         "4": "जि.प. प्राथमिक शाळा, कन्हाळगाव", "5": "जि.प. प्राथमिक शाळा, रामपुरी", "6": "जि.प. उच्च प्राथमिक शाळा, भूगाव",
-        "7": "जि.प. उच्च प्राथमिक शाळा, मेंढा (भूगाव)", "8": "जि.प. प्राथमिक शाळा, डोंगरगाव (साक्षर)", "9": "जि.प. प्राथमिक शाळा, विहीरगाव",
+        "7": "जि.प. उच्च प्राथमिक शाळा, मेंढा (भूगाव)", "8": "जि.प. प्राथमिक शाळा, डोंगरगाव (साक्षर)", "9": "जि.प. प्राथमिक शाळा, виहीरगाव",
         "10": "जि.प. प्राथमिक शाळा, कोलारा", "11": "जि.प. प्राथमिक शाळा, झरप", "12": "जि.प. उच्च प्राथमिक शाळा, दिघोरी (नान्होरी)",
         "13": "जि.प. प्राथमिक शाळा, नान्होरी (दिघोरी)", "14": "जि.प. प्राथमिक शाळा, पळसगाव", "15": "जि.प. प्राथमिक शाळा, सोनमाला"
     };
