@@ -335,7 +335,7 @@
     // ==========================================
     // Google Apps Script URL - येथे लिंक पेस्ट करा
     // ==========================================
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwGxL6lIbg5HN4nakVajYOb1W0xjvyqJX9vIzUUAHR6F2jn4zceGPnMCYKSCXzhG9FGbw/exec";
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby7tFv0OvWI2fb9iu1t9PZ5Uy2EgXLbrm41MtiX9Z92JeeCNj4-iXF1prgAek1nSxku/exec"; // <--- येथे तुमची नवीन लिंक टाका
 
     let mdmRecords = [];
     let circularsData = [];
@@ -343,7 +343,7 @@
     // Load Data on Startup
     window.onload = function() {
         switchTab('home');
-        if(SCRIPT_URL !== "https://script.google.com/macros/s/AKfycbwYdD_u6szWrM159jx1ssP8B_E_WSdKuR0kYyXP7UVOIMBX2SrxJJwaa-qXhErBpnpx/exec") {
+        if(SCRIPT_URL !== "येथे_तुमची_WEB_APP_URL_पेस्ट_करा") {
             fetchData();
             
             // ----------------------------------------------------
@@ -410,14 +410,18 @@
                 headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(payload)
             }).then(r => r.json()).then(res => {
-                alert("परिपत्रक सेव्ह झाले!");
-                btn.innerText = "अपलोड (Save)"; btn.disabled = false;
-                document.getElementById('newCircName').value = "";
-                document.getElementById('newCircFile').value = "";
-                fetchData(); // Refresh list
+                if (res.status === "uploaded") {
+                    alert("परिपत्रक सेव्ह झाले!");
+                    document.getElementById('newCircName').value = "";
+                    document.getElementById('newCircFile').value = "";
+                    fetchData(); // Refresh list
+                } else {
+                    alert("Upload failed. Error: " + res.message);
+                }
             }).catch(e => {
-                alert("Upload failed. कृपया खात्री करा की Apps Script Deploy करताना 'Execute as: Me' आणि 'Who has access: Anyone' निवडले आहे.");
-                btn.innerText = "अपलोड (Save)"; btn.disabled = false;
+                alert("Upload failed. कृपया Apps Script मध्ये नवीन Deploy केले आहे का ते तपासा.");
+            }).finally(() => {
+                 btn.innerText = "अपलोड (Save)"; btn.disabled = false;
             });
         };
         reader.readAsDataURL(file);
@@ -443,7 +447,7 @@
     const schoolNamesMap = {
         "1": "जि.प. प्राथमिक शाळा, मुरमाडी (तूप) (केंद्र शाळा)", "2": "जि.प. हायस्कूल, मुरमाडी (तूप)", "3": "जि.प. प्राथमिक शाळा, कोलारी",
         "4": "जि.प. प्राथमिक शाळा, कन्हाळगाव", "5": "जि.प. प्राथमिक शाळा, रामपुरी", "6": "जि.प. उच्च प्राथमिक शाळा, भूगाव",
-        "7": "जि.प. उच्च प्राथमिक शाळा, मेंढा (भूगाव)", "8": "जि.प. प्राथमिक शाळा, डोंगरगाव (साक्षर)", "9": "जि.प. प्राथमिक शाळा, виहीरगाव",
+        "7": "जि.प. उच्च प्राथमिक शाळा, मेंढा (भूगाव)", "8": "जि.प. प्राथमिक शाळा, डोंगरगाव (साक्षर)", "9": "जि.प. प्राथमिक शाळा, विहीरगाव",
         "10": "जि.प. प्राथमिक शाळा, कोलारा", "11": "जि.प. प्राथमिक शाळा, झरप", "12": "जि.प. उच्च प्राथमिक शाळा, दिघोरी (नान्होरी)",
         "13": "जि.प. प्राथमिक शाळा, नान्होरी (दिघोरी)", "14": "जि.प. प्राथमिक शाळा, पळसगाव", "15": "जि.प. प्राथमिक शाळा, सोनमाला"
     };
