@@ -115,41 +115,46 @@
             PRINT CSS FOR A4 SINGLE PAGE FIT 
         -------------------------------------- */
         @media print {
-            body { background: white; padding: 0; margin: 0; font-size: 10pt; }
+            body { background: white; padding: 0; margin: 0; font-size: 9pt; }
             .container { box-shadow: none; max-width: 100%; border-radius: 0; padding: 0; margin: 0;}
             
             /* Hide elements not needed for print */
             .nav-tabs, .submit-btn, .export-btn, .pdf-section, #homeSection, .action-buttons, .summary-cards, .live-status, #loader, .nav-actions, .info-section { display: none !important; }
             
-            .header { background-color: white !important; color: black !important; padding: 5px 0; border-bottom: 1px solid #ccc; page-break-after: avoid;}
-            .header h1 { margin: 0; font-size: 18pt; }
-            .header h2 { margin: 2px 0 0 0; font-size: 14pt; }
-            .header p { margin: 2px 0 0 0; font-size: 12pt; }
+            .header { background-color: white !important; color: black !important; padding: 2px 0; border-bottom: 1px solid #ccc; page-break-after: avoid;}
+            .header h1 { margin: 0; font-size: 14pt; }
+            .header h2 { margin: 0; font-size: 12pt; }
+            .header p { margin: 0; font-size: 10pt; }
             
             /* सविस्तर अहवाल प्रिंट करत असताना मुख्य Header लपवा */
             body[data-tab="detailed"] .header { display: none !important; }
 
             .evaluation-section, .dashboard-section { padding: 10px 0 !important; }
 
+            /* Compact inputs and textareas for print */
             input, select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-weight: bold; padding: 0 !important; }
-            textarea { border: 1px solid #ccc !important; padding: 5px !important; resize: none; overflow: hidden; background: transparent !important; }
+            textarea { border: 1px solid #ccc !important; padding: 2px !important; resize: none; overflow: hidden; background: transparent !important; }
             
-            table { margin-bottom: 10px; page-break-inside: avoid; }
+            table { margin-bottom: 5px; page-break-inside: avoid; width: 100%; }
             tr { page-break-inside: avoid; page-break-after: auto; }
-            th { background-color: #f2f2f2 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 4px;}
-            td { padding: 4px; font-size: 10pt; }
+            th { background-color: #f2f2f2 !important; color: black !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 2px !important;}
+            td { padding: 2px !important; font-size: 9pt; }
             .section-title { display: none; }
             
-            /* Detailed Print Area Settings for Single A4 Fit */
-            #detailedPrintArea h3#detSchoolTitle { margin: 5px 0 10px 0 !important; font-size: 14pt !important; line-height: 1.2;}
-            #detailedPrintArea table th { padding: 3px !important; font-size: 10pt !important; line-height: 1.1 !important; }
-            #detailedPrintArea table td { padding: 3px 5px !important; font-size: 10pt !important; line-height: 1.2 !important; }
-            #detailedPrintArea table .total-row td { font-size: 11pt !important; }
-            #detailedPrintArea table tfoot tr td { font-size: 12pt !important; padding: 5px !important; }
-            .signature-section { margin-top: 15px !important; font-size: 12pt !important; page-break-inside: avoid; }
+            /* Detailed Print Area Settings for Single A4 Fit - Adjusted for single page */
+            #detailedPrintArea h3#detSchoolTitle { margin: 0 0 5px 0 !important; font-size: 12pt !important; line-height: 1.1;}
+            #detailedPrintArea h3#detSchoolTitle span { font-size: 10pt !important; }
+            
+            #detailedPrintArea table th { padding: 2px !important; font-size: 9pt !important; line-height: 1 !important; }
+            #detailedPrintArea table td { padding: 2px 4px !important; font-size: 9pt !important; line-height: 1 !important; }
+            #detailedPrintArea table .total-row td { font-size: 9.5pt !important; padding: 2px !important; }
+            #detailedPrintArea table tfoot tr td { font-size: 10pt !important; padding: 2px !important; }
+            
+            /* स्वाक्षरीचा भाग एकाच पानावर बसण्यासाठी margin आणि font-size ऍडजस्ट केले */
+            .signature-section { margin-top: 5px !important; font-size: 10pt !important; page-break-inside: avoid; }
             
             #editControls, #lockedMessage, #submitButtonsArea { display: none !important; }
-            @page { size: A4 portrait; margin: 10mm; }
+            @page { size: A4 portrait; margin: 5mm; } 
         }
     </style>
 </head>
@@ -266,7 +271,7 @@
                         <option value="2" id="optVisit2" disabled>द्वितीय महिना भेट</option>
                         <option value="3" id="optVisit3" disabled>तृतीय महिना भेट</option>
                     </select>
-                    <small id="visitWarning" style="color: #e74c3c; font-weight: bold; display: none;">* आधीची भेट नोंदवणे आवश्यक आहे.</small>
+                    <small id="visitWarning" style="color: #e74c3c; font-weight: bold; display: none;">* आधीची भेट नोंदवणे आवश्यक ভাগে.</small>
                 </div>
 
                 <div class="form-group" style="flex: 1;">
@@ -473,10 +478,11 @@
                     </tr>
                 </tfoot>
             </table>
-
-            <div class="signature-section" style="margin-top: 60px; display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 16px;">
-                <div>स्वाक्षरी<br><br><br><span id="detDetSahayyakName" style="color:#2c3e50; font-weight:600;">...........................</span><br>(सहाय्यक)</div>
-                <div>स्वाक्षरी<br><br><br><span id="detDetPathakName" style="color:#2c3e50; font-weight:600;">...........................</span><br>(पथक प्रमुख)</div>
+            
+            <!-- स्वाक्षरीचा भाग (margin-top कमी केला आणि <br> कमी केले जेणेकरून प्रिंटमध्ये जागा वाचेल) -->
+            <div class="signature-section" style="margin-top: 30px; display: flex; justify-content: space-around; text-align: center; font-weight: bold; font-size: 16px;">
+                <div>स्वाक्षरी<br><br><span id="detDetSahayyakName" style="color:#2c3e50; font-weight:600;">...........................</span><br>(सहाय्यक)</div>
+                <div>स्वाक्षरी<br><br><span id="detDetPathakName" style="color:#2c3e50; font-weight:600;">...........................</span><br>(पथक प्रमुख)</div>
             </div>
         </div>
 
