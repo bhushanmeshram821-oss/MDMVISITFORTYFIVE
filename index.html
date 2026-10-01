@@ -126,7 +126,10 @@
             .header h2 { margin: 2px 0 0 0; font-size: 14pt; }
             .header p { margin: 2px 0 0 0; font-size: 12pt; }
             
-            .evaluation-section, .dashboard-section { padding: 10px 0 !important; display: block !important;}
+            /* सविस्तर अहवाल प्रिंट करत असताना मुख्य Header लपवा */
+            body[data-tab="detailed"] .header { display: none !important; }
+
+            .evaluation-section, .dashboard-section { padding: 10px 0 !important; }
 
             input, select { border: none !important; background: transparent !important; -webkit-appearance: none; -moz-appearance: none; appearance: none; font-weight: bold; padding: 0 !important; }
             textarea { border: 1px solid #ccc !important; padding: 5px !important; resize: none; overflow: hidden; background: transparent !important; }
@@ -764,6 +767,9 @@
     // Tab Switching System
     // ==========================================
     function switchTab(tabName) {
+        // प्रिंटिंग सेटिंग्ससाठी बॉडीला टॅबचे नाव देणे
+        document.body.setAttribute('data-tab', tabName);
+
         document.getElementById('homeSection').style.display = tabName === 'home' ? 'block' : 'none';
         document.getElementById('formSection').style.display = tabName === 'form' ? 'block' : 'none';
         document.getElementById('dashboardSection').style.display = tabName === 'dashboard' ? 'block' : 'none';
