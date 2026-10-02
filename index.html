@@ -266,7 +266,7 @@
                         <option value="2" id="optVisit2" disabled>द्वितीय महिना भेट</option>
                         <option value="3" id="optVisit3" disabled>तृतीय महिना भेट</option>
                     </select>
-                    <small id="visitWarning" style="color: #e74c3c; font-weight: bold; display: none;">* आधीची भेट नोंदवणे आवश्यक आहे.</small>
+                    <small id="visitWarning" style="color: #e74c3c; font-weight: bold; display: none;">* आधीची भेट नोंदवणे आवश्यक মাঠে.</small>
                 </div>
 
                 <div class="form-group" style="flex: 1;">
@@ -316,12 +316,11 @@
                     <tbody>
                         <tr><td>1</td><td>MDM / VSK वर ऑनलाईन उपस्थिती रोज नोंदवली जाते काय?</td><td align="center">10</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="10" oninput="calculateTotals()" required></td></tr>
                         <tr><td>2</td><td>प्रत्यक्ष विद्यार्थी उपस्थिती व लाभार्थी नोंद</td><td align="center">5</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="5" oninput="calculateTotals()" required></td></tr>
-                        <tr><td>3</td><td>साप्ताहिक मेनू चार्ट, Junk Food  बोर्ड  व माहितीचे प्रदर्शन</td><td align="center">5</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="5" oninput="calculateTotals()" required></td></tr>
+                        <tr><td>3</td><td>साप्ताहिक मेनू चार्ट, Junk Food बोर्ड व माहितीचे प्रदर्शन</td><td align="center">5</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="5" oninput="calculateTotals()" required></td></tr>
                         <tr><td>4</td><td>दैनिक पोषण आहार (तांदूळ व धान्यादी) नोंदवही</td><td align="center">4</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="4" oninput="calculateTotals()" required></td></tr>
                         <tr><td>5</td><td>चव नोंदवही, BMI नोंदी</td><td align="center">3</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="3" oninput="calculateTotals()" required></td></tr>
                         <tr><td>6</td><td>आर्थिक लेखे</td><td align="center">2</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="2" oninput="calculateTotals()" required></td></tr>
-                        <tr><td>7</td><td>साप्ताहिक +
-.पूरक आहार वाटप</td><td align="center">1</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="1" oninput="calculateTotals()" required></td></tr>
+                        <tr><td>7</td><td>साप्ताहिक पूरक आहार वाटप</td><td align="center">1</td><td align="center"><input type="number" class="marks-input mark-c" min="0" max="1" oninput="calculateTotals()" required></td></tr>
                         <tr class="total-row"><td colspan="2" style="text-align:right;">विभाग C चे एकूण प्राप्त गुण:</td><td align="center">30</td><td align="center" id="totalMarksC">0</td></tr>
                     </tbody>
                 </table>
@@ -330,7 +329,7 @@
                 <table>
                     <thead><tr><th width="10%">अ.क्र.</th><th width="55%">मूल्यमापन निकष</th><th width="15%" style="text-align:center;">कमाल गुण</th><th width="20%" style="text-align:center;">प्राप्त गुण</th></tr></thead>
                     <tbody>
-                        <tr><td>1</td><td>परसबाग नियोजन ,नाविन्यपूर्ण पोषण उपक्रम , लोकसहभाग</td><td align="center">5</td><td align="center"><input type="number" class="marks-input mark-d" min="0" max="5" oninput="calculateTotals()" required></td></tr>
+                        <tr><td>1</td><td>परसबाग नियोजन , नाविन्यपूर्ण पोषण उपक्रम , लोकसहभाग</td><td align="center">5</td><td align="center"><input type="number" class="marks-input mark-d" min="0" max="5" oninput="calculateTotals()" required></td></tr>
                         <tr><td>2</td><td>स्वयंपाकी स्वच्छता, ड्रेस,करारनामा,वैधकीय तपासणी</td><td align="center">5</td><td align="center"><input type="number" class="marks-input mark-d" min="0" max="5" oninput="calculateTotals()" required></td></tr>
                         <tr><td>3</td><td>भोजन ग्रहण शिस्त</td><td align="center">3</td><td align="center"><input type="number" class="marks-input mark-d" min="0" max="3" oninput="calculateTotals()" required></td></tr>
                         <tr><td>4</td><td>अन्न नासाडी उपाय</td><td align="center">2</td><td align="center"><input type="number" class="marks-input mark-d" min="0" max="2" oninput="calculateTotals()" required></td></tr>
@@ -796,7 +795,14 @@
 
         if(tabName === 'dashboard') renderDashboard();
         if(tabName === 'history') renderHistory();
-        if(tabName === 'detailed') renderDetailedReport(); // नवीन टॅब डेटा रिफ्रेश
+        if(tabName === 'detailed') {
+            // ** नवीन बदल **: फॉर्मवर असलेली शाळा सविस्तर अहवालात आपोआप सिलेक्ट करण्यासाठी
+            let formSchoolId = document.getElementById('schoolName').value;
+            if (formSchoolId) {
+                document.getElementById('detailedSchoolSelect').value = formSchoolId;
+            }
+            renderDetailedReport(); 
+        }
         
         window.scrollTo(0, 0);
     }
@@ -915,7 +921,7 @@
         { s:'C', n:'4', q:'दैनिक पोषण आहार (तांदूळ व धान्यादी) नोंदवही', m:4 },
         { s:'C', n:'5', q:'चव नोंदवही, BMI नोंदी', m:3 },
         { s:'C', n:'6', q:'आर्थिक लेखे', m:2 },
-        { s:'C', n:'7', q:'पूरक आहार वाटप', m:1 },
+        { s:'C', n:'7', q:'साप्ताहिक पूरक आहार वाटप', m:1 },
         
         { s:'D', n:'1', q:'परसबाग नियोजन , नाविन्यपूर्ण पोषण उपक्रम , लोकसहभाग', m:5 },
         { s:'D', n:'2', q:'स्वयंपाकी स्वच्छता, ड्रेस,करारनामा,वैधकीय तपासणी', m:5 },
@@ -980,6 +986,21 @@
             try { val3 = typeof v3.inputValues === 'string' ? JSON.parse(v3.inputValues) : v3.inputValues; } catch(e) {}
         }
 
+        // ** नवीन बदल **: मुल्यांकन प्रपत्रात भरलेले 'लाईव्ह' (Live Unsaved) गुण आपोआप अपडेट करण्यासाठी 
+        let activeFormSchool = document.getElementById('schoolName').value;
+        let activeFormVisit = document.getElementById('visitNumber').value;
+        
+        if (schoolId === activeFormSchool) {
+            let liveInputs = Array.from(document.querySelectorAll('.marks-input')).map(input => input.value);
+            // जर फॉर्ममध्ये काहीतरी टाईप केले असेल, तर ते लाईव्ह व्हॅल्यू म्हणून वापरा
+            if (liveInputs.some(val => val !== "")) {
+                if (activeFormVisit === "1") val1 = liveInputs;
+                else if (activeFormVisit === "2") val2 = liveInputs;
+                else if (activeFormVisit === "3") val3 = liveInputs;
+            }
+        }
+        // =======================================================================================
+
         let html = '';
         let currentSec = '';
         let secSum = { m:0, v1:0, v2:0, v3:0 };
@@ -1027,17 +1048,19 @@
 
         tbody.innerHTML = html;
 
-        let tot1 = v1 ? parseInt(v1.marks) : 0;
-        let tot2 = v2 ? parseInt(v2.marks) : 0;
-        let tot3 = v3 ? parseInt(v3.marks) : 0;
+        // ** नवीन बदल **: एकूण बेरीज आता अरे (Array) मधून लाईव्ह कॅल्क्युलेट होईल, जेणेकरून जुन्या डेटावर अवलंबून राहायची गरज नाही
+        let tot1 = val1.reduce((sum, val) => sum + (val && !isNaN(val) ? parseInt(val) : 0), 0);
+        let tot2 = val2.reduce((sum, val) => sum + (val && !isNaN(val) ? parseInt(val) : 0), 0);
+        let tot3 = val3.reduce((sum, val) => sum + (val && !isNaN(val) ? parseInt(val) : 0), 0);
 
-        document.getElementById('detV1Total').innerText = v1 ? tot1 : "-";
-        document.getElementById('detV2Total').innerText = v2 ? tot2 : "-";
-        document.getElementById('detV3Total').innerText = v3 ? tot3 : "-";
+        document.getElementById('detV1Total').innerText = (val1.length > 0) ? tot1 : "-";
+        document.getElementById('detV2Total').innerText = (val2.length > 0) ? tot2 : "-";
+        document.getElementById('detV3Total').innerText = (val3.length > 0) ? tot3 : "-";
         
         let allVisitsSum = tot1 + tot2 + tot3;
-        document.getElementById('detAllVisitsTotal').innerText = (allVisitsSum > 0) ? allVisitsSum : "-";
-        document.getElementById('detGrandTotal').innerText = (allVisitsSum > 0) ? (allVisitsSum + " / 300") : "-";
+        let hasData = (val1.length > 0 || val2.length > 0 || val3.length > 0);
+        document.getElementById('detAllVisitsTotal').innerText = hasData ? allVisitsSum : "-";
+        document.getElementById('detGrandTotal').innerText = hasData ? (allVisitsSum + " / 300") : "-";
     }
 </script>
 </body>
