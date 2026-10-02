@@ -749,6 +749,16 @@
     }
 
     function calculateTotals() {
+        // कमाल गुणांपेक्षा जास्त गुण दिल्यास ते आपोआप दुरुस्त करण्यासाठी
+        document.querySelectorAll('.marks-input').forEach(i => {
+            if (i.value !== "") {
+                let val = parseInt(i.value);
+                let max = parseInt(i.max);
+                if (val > max) i.value = max;
+                if (val < 0) i.value = 0;
+            }
+        });
+
         let tA = 0, tB = 0, tC = 0, tD = 0;
         document.querySelectorAll('.mark-a').forEach(i => { if(i.value) tA += parseInt(i.value); }); document.getElementById('totalMarksA').innerText = tA;
         document.querySelectorAll('.mark-b').forEach(i => { if(i.value) tB += parseInt(i.value); }); document.getElementById('totalMarksB').innerText = tB;
